@@ -9,12 +9,12 @@ int main(int argc, char* argv[]) {
     printf("chord1: %s\n", chord_str(chord1));
     printf("chord2: %s\n", chord_str(chord2));
 
-
     printf("%d\n", C);
 
     // cleanup
     chord_delete(chord1);
     chord_delete(chord2);
+
+    printf("done\n");
     return 0;
 }
-// test
