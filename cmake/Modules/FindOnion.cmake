@@ -1,0 +1,16 @@
+if(ONION_INCLUDE_DIR AND ONION_LIBRARY)
+	set(ONION_FOUND true)
+else()
+	find_path(ONION_INCLUDE_DIR "onion/onion.h")
+	find_library(ONION_LIBRARY ONION)
+
+	if(ONION_INCLUDE_DIR AND ONION_LIBRARY)
+		set(ONION_FOUND true)
+		message(STATUS "Found Onion: ${ONION_LIBRARY}")
+	else()
+		set(ONION_FOUND false)
+		message(STATUS "Could not find Onion")
+	endif()
+
+	mark_as_advanced(ONION_INCLUDE_DIR ONION_LIBRARY)
+endif()
