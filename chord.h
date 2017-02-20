@@ -38,10 +38,12 @@ chord_t* chord_new(music_note_t key, chord_quality_t chord_quality, unsigned int
 chord_t* chord_new_as_string(const char* name);
 
 const char* chord_str(chord_t* chord);
+const char* chord_to_json(chord_t* chord);
+
 
 unsigned int* chord_notes(chord_t* chord);
 unsigned int* chord_notes_with_octave(chord_t* chord, unsigned char octave);
 
 
-void chord_delete(chord_t* chord);
+void chord_free(chord_t* chord);
 #endif

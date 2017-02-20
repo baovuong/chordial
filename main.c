@@ -2,12 +2,12 @@
 #include <signal.h>
 #include <onion/log.h>
 #include <onion/onion.h>
-#include <onion/dict.h>
 #include <onion/block.h>
 #include <onion/low.h>
 #include <onion/request.h>
 #include <onion/response.h>
 #include <onion/shortcuts.h>
+#include <json/json.h>
 
 #include "chord.h"
 
@@ -16,17 +16,14 @@ onion_connection_status index(void *p, onion_request *req, onion_response *res) 
 }
 
 onion_connection_status chord(void *p, onion_request *req, onion_response *res) {
-    onion_dict *jres = onion_dict_new();
     onion_block *jresb = onion_block_new();
     chord_t* chord = NULL;
+	char* json;
     char* default_message = onion_low_strdup("no chord provided");
     if (onion_request_get_query(req, "1")) {
         chord = chord_new_as_string(onion_request_get_query(req, "1"));
-        onion_dict_add(jres, "key", &(chord->key), OD_DUP_VALUE);
-        onion_dict_add(jres, "chord_quality", &(chord->chord_quality), OD_DUP_VALUE);
-        onion_dict_add(jres, "interval", &(chord->interval), OD_DUP_VALUE);
+		json = chord_to_json(chord);
     } else {
-        onion_dict_add(jres, "message", default_message, OD_DUP_VALUE);
     }
 
     // write to response
@@ -37,7 +34,7 @@ onion_connection_status chord(void *p, onion_request *req, onion_response *res) 
     onion_block_free(jresb);
     onion_dict_free(jres);
     onion_low_free(default_message);
-    chord_delete(chord);
+    chord_free(chord);
 
     return OCS_PROCESSED;
 }

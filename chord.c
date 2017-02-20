@@ -125,7 +125,12 @@ unsigned int* chord_notes_with_octave(chord_t* chord, unsigned char octave) {
     return NULL;
 }
 
-void chord_delete(chord_t* chord) {
+
+const char* chord_to_json(chord_t* chord) {
+    struct json_object *jobj = json_object_new_object();
+}
+
+void chord_free(chord_t* chord) {
     if (chord != NULL) {
         free(chord);
     }
