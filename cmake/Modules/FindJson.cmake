@@ -1,0 +1,16 @@
+if(JSON_INCLUDE_DIR AND JSON_LIBRARY)
+	set(JSON_FOUND true)
+else()
+	find_path(JSON_INCLUDE_DIR "json/json.h")
+	find_library(JSON_LIBRARY json)
+
+	if(JSON_INCLUDE_DIR AND JSON_LIBRARY)
+		set(JSON_FOUND true)
+		message(STATUS "Found Json: ${JSON_LIBRARY}")
+	else()
+		set(JSON_FOUND false)
+		message(STATUS "Could not find Json")
+	endif()
+
+	mark_as_advanced(JSON_INCLUDE_DIR JSON_LIBRARY)
+endif()
