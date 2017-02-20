@@ -2,7 +2,7 @@ if(ONION_INCLUDE_DIR AND ONION_LIBRARY)
 	set(ONION_FOUND true)
 else()
 	find_path(ONION_INCLUDE_DIR "onion/onion.h")
-	find_library(ONION_LIBRARY ONION)
+	find_library(ONION_LIBRARY onion)
 
 	if(ONION_INCLUDE_DIR AND ONION_LIBRARY)
 		set(ONION_FOUND true)
