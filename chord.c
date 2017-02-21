@@ -8,29 +8,8 @@
 // using this for reference:
 // https://en.wikipedia.org/wiki/List_of_chords
 
-char* note_values[] = {
-    "C",
-    "C#",
-    "D",
-    "D#",
-    "E",
-    "F",
-    "F#",
-    "G",
-    "G#",
-    "A",
-    "A#",
-    "B"
-};
-
-char* chord_quality_values[] = {
-    "maj",
-    "min",
-    "aug",
-    "dim",
-    "dom"
-};
-
+char* note_values[] = {"C","C#","D","D#","E","F","F#","G","G#","A","A#","B"};
+char* chord_quality_values[] = {"maj","min","aug","dim","dom"};
 const char* chord_quality_names[] = {
     "major",
     "minor",
