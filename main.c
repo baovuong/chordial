@@ -16,10 +16,8 @@ onion_connection_status index(void *p, onion_request *req, onion_response *res) 
 }
 
 onion_connection_status chord(void *p, onion_request *req, onion_response *res) {
-    onion_block *jresb = onion_block_new();
     chord_t* chord = NULL;
 	struct json_object* json = NULL;
-    char* default_message = onion_low_strdup("no chord provided");
     if (onion_request_get_query(req, "1")) {
         chord = chord_new_as_string(onion_request_get_query(req, "1"));
         chord_to_json_object(chord, &json);
@@ -35,8 +33,6 @@ onion_connection_status chord(void *p, onion_request *req, onion_response *res) 
     onion_response_write0(res, json_string);
 
     // cleanup
-    onion_block_free(jresb);
-    onion_low_free(default_message);
     chord_free(chord);
 
     return OCS_PROCESSED;
@@ -52,15 +48,15 @@ void on_exit(int _) {
 }
 
 int main(int argc, char* argv[]) {
-    onion *o = onion_new(O_POOL);
+    o = onion_new(O_THREADED);
     onion_set_timeout(o, 5000);
 	onion_set_hostname(o,"0.0.0.0");
+	onion_set_port(o, "9077");
 
     // urls
     onion_url *urls=onion_root_url(o);
-    onion_url_add(urls, "chord", chord);
-    onion_url_add(urls, "^(.*)$", chord);
-
+    onion_url_add(urls, "^chord/(.*)", chord);
+	//onion_url_add(urls, "^hello", index);
 
     onion_listen(o);
     onion_free(o);
