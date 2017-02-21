@@ -25,6 +25,7 @@ onion_connection_status chord(void *p, onion_request *req, onion_response *res) 
         chord_to_json_object(chord, &json);
     } else {
         json = json_object_new_object();
+        json_object_object_add(json, "message", json_object_new_string("no chord provided"));
     }
 
     // write to response
