@@ -31,6 +31,14 @@ char* chord_quality_values[] = {
     "dom"
 };
 
+const char* chord_quality_names[] = {
+    "major",
+    "minor",
+    "augmented",
+    "diminished",
+    "dominant"
+};
+
 // helper functions
 int find_string(int array_length, char* array[], const char* value) {
     for (int i=0; i<array_length; i++) {
@@ -53,7 +61,7 @@ chord_t* chord_new(music_note_t key, chord_quality_t chord_quality, unsigned int
 
 chord_t* chord_new_as_string(const char* name) {
     char* valid_note = "ABCDEFG#";
-    char* valid_quality = "adgijmni";
+    char* valid_quality = "adgijmnou";
     char* valid_number = "0123456789";
 
     // parsing time
@@ -129,8 +137,8 @@ unsigned int* chord_notes_with_octave(chord_t* chord, unsigned char octave) {
 
 void chord_to_json_object(chord_t* chord, struct json_object** jchord) {
     *jchord = json_object_new_object();
-    json_object_object_add(*jchord, "key", json_object_new_int((int)chord->key));
-    json_object_object_add(*jchord, "quality", json_object_new_int((int)chord->chord_quality));
+    json_object_object_add(*jchord, "key", json_object_new_string(note_values[(int)chord->key]));
+    json_object_object_add(*jchord, "quality", json_object_new_string(chord_quality_names[(int)chord->chord_quality]));
     json_object_object_add(*jchord, "interval", json_object_new_int(chord->interval));
 }
 
