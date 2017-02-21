@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <json/json.h>
 
 #include "chord.h"
 
@@ -126,8 +127,15 @@ unsigned int* chord_notes_with_octave(chord_t* chord, unsigned char octave) {
 }
 
 
-const char* chord_to_json(chord_t* chord) {
-    struct json_object *jobj = json_object_new_object();
+void chord_to_json_object(chord_t* chord, struct json_object** jchord) {
+    *jchord = json_object_new_object();
+    struct json_object *jkey = json_object_new_int((int)chord->key);
+    struct json_object *jquality = json_object_new_int((int)chord->chord_quality);
+    struct json_object *jinterval = json_object_new_int(chord->interval);
+
+    json_object_object_add(*jchord, "key", jkey);
+    json_object_object_add(*jchord, "quality", jquality);
+    json_object_object_add(*jchord, "interval", jinterval);
 }
 
 void chord_free(chord_t* chord) {

@@ -18,21 +18,23 @@ onion_connection_status index(void *p, onion_request *req, onion_response *res) 
 onion_connection_status chord(void *p, onion_request *req, onion_response *res) {
     onion_block *jresb = onion_block_new();
     chord_t* chord = NULL;
-	char* json;
+	struct json_object* json = NULL;
     char* default_message = onion_low_strdup("no chord provided");
     if (onion_request_get_query(req, "1")) {
         chord = chord_new_as_string(onion_request_get_query(req, "1"));
-		json = chord_to_json(chord);
+        chord_to_json_object(chord, &json);
     } else {
+        json = json_object_new_object();
     }
 
     // write to response
-    onion_block_add_block(jresb, onion_dict_to_json(jres));
-    onion_response_write(res, onion_block_data(jresb), onion_block_size(jresb));
+    onion_response_set_header(res, "Content-Type", "application/json");
+
+    const char* json_string = json_object_to_json_string(json);
+    onion_response_write0(res, json_string);
 
     // cleanup
     onion_block_free(jresb);
-    onion_dict_free(jres);
     onion_low_free(default_message);
     chord_free(chord);
 

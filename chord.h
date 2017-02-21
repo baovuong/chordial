@@ -1,6 +1,8 @@
 #ifndef CHORD_H
 #define CHORD_H
 
+#include <json/json.h>
+
 enum music_note {
     C,
     C_SHARP,
@@ -38,7 +40,7 @@ chord_t* chord_new(music_note_t key, chord_quality_t chord_quality, unsigned int
 chord_t* chord_new_as_string(const char* name);
 
 const char* chord_str(chord_t* chord);
-const char* chord_to_json(chord_t* chord);
+void chord_to_json_object(chord_t* chord, struct json_object** jchord);
 
 
 unsigned int* chord_notes(chord_t* chord);
