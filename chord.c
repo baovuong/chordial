@@ -28,9 +28,18 @@ int find_string(int array_length, char* array[], const char* value) {
     return -1;
 }
 
-//
+// constructors
 
-chord_t* chord_new(music_note_t key, chord_quality_t chord_quality, unsigned int interval) {
+chord_t* chord_new() {
+    return chord_new1(0);
+}
+chord_t* chord_new1(music_note_t key) {
+    return chord_new2(key, 0);
+}
+chord_t* chord_new2(music_note_t key, chord_quality_t chord_quality) {
+    return chord_new3(key, chord_quality, 3);
+}
+chord_t* chord_new3(music_note_t key, chord_quality_t chord_quality, unsigned int interval) {
     chord_t* chord = (chord_t*)malloc(sizeof(chord_t));
     chord->key = key;
     chord->chord_quality = chord_quality;
@@ -39,6 +48,7 @@ chord_t* chord_new(music_note_t key, chord_quality_t chord_quality, unsigned int
 }
 
 chord_t* chord_new_as_string(const char* name) {
+    
     char* valid_note = "ABCDEFG#";
     char* valid_quality = "adgijmnou";
     char* valid_number = "0123456789";
@@ -56,7 +66,8 @@ chord_t* chord_new_as_string(const char* name) {
         switch (state) {
             case 0:
                 if (strchr(valid_note, c) != NULL) {
-                    note_str[j++] = c;
+                    if (j < 3)
+                        note_str[j++] = c;
                 }
                 else if (strchr(valid_quality, c) != NULL) {
                     note_str[j] = '\0';
@@ -67,7 +78,8 @@ chord_t* chord_new_as_string(const char* name) {
                 break;
             case 1:
                 if (strchr(valid_quality, c) != NULL) {
-                    quality_str[j++] = c;
+                    if (j < 4)
+                        quality_str[j++] = c;
                 }
                 else if (strchr(valid_number, c) != NULL) {
                     quality_str[j] = '\0';
@@ -86,11 +98,14 @@ chord_t* chord_new_as_string(const char* name) {
                 break;
         }
     }
-
-    return chord_new(
-        find_string(12, note_values, note_str),
-        find_string(5, chord_quality_values, quality_str),
-        interval);
+    
+    int note_index = find_string(12, note_values, note_str);
+    int quality_index = find_string(5, chord_quality_values, quality_str);
+    if (note_index >= 0 && quality_index >= 0) {
+        return chord_new3(note_index, quality_index, interval);
+    }
+    
+    return NULL;
 }
 
 const char* chord_str(chord_t* chord) {
@@ -115,6 +130,9 @@ unsigned int* chord_notes_with_octave(chord_t* chord, unsigned char octave) {
 
 
 void chord_to_json_object(chord_t* chord, struct json_object** jchord) {
+    if (*jchord != NULL) {
+        free(*jchord);
+    }
     *jchord = json_object_new_object();
     json_object_object_add(*jchord, "key", json_object_new_string(note_values[(int)chord->key]));
     json_object_object_add(*jchord, "quality", json_object_new_string(chord_quality_names[(int)chord->chord_quality]));
