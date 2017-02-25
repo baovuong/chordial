@@ -18,6 +18,9 @@ const char* chord_quality_names[] = {
     "dominant"
 };
 
+int extensions[] = {0, 7, 9, 11, 13};
+
+
 // helper functions
 int find_string(int array_length, char* array[], const char* value) {
     for (int i=0; i<array_length; i++) {
