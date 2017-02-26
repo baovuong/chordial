@@ -39,6 +39,8 @@ music_note_t* music_note_new1(enum pitch_class pitch_class);
 music_note_t* music_note_new2(enum pitch_class pitch_class, unsigned int octave);
 
 unsigned int music_note_to_midi_value(music_note_t);
+const char* music_note_to_string(music_note_t);
+
 
 // Interval class
 struct interval {
@@ -59,13 +61,13 @@ typedef struct chord chord_t;
 // constructors
 chord_t* chord_new();
 chord_t* chord_new1(music_note_t root);
-chord_t* chord_new2(music_note_t root, interval_t interval);
+//chord_t* chord_new2(music_note_t root, interval_t interval);
 chord_t* chord_new_as_string(const char* name);
 
 void chord_add_interval(interval_t interval);
 
 // to string
-const char* chord_str(chord_t* chord);
+const char* chord_to_string(chord_t* chord);
 
 // to json object
 void chord_to_json_object(chord_t* chord, struct json_object** jchord);

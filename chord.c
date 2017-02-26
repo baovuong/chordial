@@ -8,7 +8,7 @@
 // using this for reference:
 // https://en.wikipedia.org/wiki/List_of_chords
 
-char* note_values[] = {"C","C#","D","D#","E","F","F#","G","G#","A","A#","B"};
+char* pitch_class_names[] = {"C","C#","D","D#","E","F","F#","G","G#","A","A#","B"};
 char* chord_quality_values[] = {"maj","min","aug","dim","dom"};
 const char* chord_quality_names[] = {
     "major",
@@ -20,6 +20,37 @@ const char* chord_quality_names[] = {
 
 int extensions[] = {0, 7, 9, 11, 13};
 
+char* known_chord_interval_names[] = {
+    "maj",
+    "min",
+    "aug",
+    "dim",
+    "maj6",
+    "min6",
+    "dom7",
+    "maj7",
+    "min7",
+    // "aug7",
+    // "dim7",
+    // "maj9",
+    // "min9"
+    // "dom9",
+    // "aug9",
+    // "dim9",
+};
+
+// https://en.wikipedia.org/wiki/Chord_names_and_symbols_(popular_music)
+interval_t known_chord_intervals[9][6] = {
+    { {MAJOR, 3}, {PERFECT, 5}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // maj
+    { {MINOR, 3}, {PERFECT, 5}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // min
+    { {MAJOR, 3}, {AUGMENTED, 5}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // aug
+    { {MINOR, 3}, {DIMINISHED, 5}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // dim
+    { {MAJOR, 3}, {PERFECT, 5}, {MAJOR, 6}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // maj6
+    { {MINOR, 3}, {PERFECT, 5}, {MAJOR, 6}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // min6
+    { {MAJOR, 3}, {PERFECT, 5}, {MINOR, 7}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // dom7
+    { {MINOR, 3}, {PERFECT, 5}, {MAJOR, 7}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // maj7
+    { {MINOR, 3}, {PERFECT, 5}, {MINOR, 7}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // min7
+};
 
 // helper functions
 int find_string(int array_length, char* array[], const char* value) {
@@ -51,7 +82,7 @@ chord_t* chord_new3(music_note_t key, chord_quality_t chord_quality, unsigned in
 }
 
 chord_t* chord_new_as_string(const char* name) {
-    
+
     char* valid_note = "ABCDEFG#";
     char* valid_quality = "adgijmnou";
     char* valid_number = "0123456789";
@@ -101,26 +132,18 @@ chord_t* chord_new_as_string(const char* name) {
                 break;
         }
     }
-    
+
     int note_index = find_string(12, note_values, note_str);
     int quality_index = find_string(5, chord_quality_values, quality_str);
     if (note_index >= 0 && quality_index >= 0) {
         return chord_new3(note_index, quality_index, interval);
     }
-    
+
     return NULL;
 }
 
 const char* chord_str(chord_t* chord) {
-    char* result = (char*)calloc(sizeof(char), 8);
-    strcat(result, note_values[(int)chord->key]);
-    strcat(result, chord_quality_values[(int)chord->chord_quality]);
-
-    char interval_string[3];
-    sprintf(interval_string, "%d", chord->interval);
-
-    strcat(result, interval_string);
-    return result;
+    return "a chord";
 }
 
 unsigned int* chord_notes(chord_t* chord) {
