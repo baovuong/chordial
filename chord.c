@@ -82,63 +82,6 @@ chord_t* chord_new3(music_note_t key, chord_quality_t chord_quality, unsigned in
 }
 
 chord_t* chord_new_as_string(const char* name) {
-
-    char* valid_note = "ABCDEFG#";
-    char* valid_quality = "adgijmnou";
-    char* valid_number = "0123456789";
-
-    // parsing time
-    char note_str[3];
-    char quality_str[4];
-    unsigned int interval = 0;
-
-    char c;
-    int i = 0;
-    int j = 0;
-    int state = 0;
-    while ((c = name[i++]) != '\0') {
-        switch (state) {
-            case 0:
-                if (strchr(valid_note, c) != NULL) {
-                    if (j < 3)
-                        note_str[j++] = c;
-                }
-                else if (strchr(valid_quality, c) != NULL) {
-                    note_str[j] = '\0';
-                    j = 0;
-                    quality_str[j++] = c;
-                    state = 1;
-                }
-                break;
-            case 1:
-                if (strchr(valid_quality, c) != NULL) {
-                    if (j < 4)
-                        quality_str[j++] = c;
-                }
-                else if (strchr(valid_number, c) != NULL) {
-                    quality_str[j] = '\0';
-                    j = 0;
-                    interval += c - '0';
-                    state = 2;
-                }
-                break;
-            case 2:
-                if (strchr(valid_number, c) != NULL) {
-                    interval *= 10;
-                    interval += c - '0';
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    int note_index = find_string(12, note_values, note_str);
-    int quality_index = find_string(5, chord_quality_values, quality_str);
-    if (note_index >= 0 && quality_index >= 0) {
-        return chord_new3(note_index, quality_index, interval);
-    }
-
     return NULL;
 }
 
