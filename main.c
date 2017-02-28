@@ -8,7 +8,13 @@
 #include <onion/response.h>
 #include <onion/shortcuts.h>
 #include <onion/version.h>
+
+#include <onion/static.h>
+#include <onion/opack.h>
+
 #include <json/json.h>
+
+#include "assets.h"
 
 #include "music_note.h"
 #include "chord.h"
@@ -84,6 +90,8 @@ int main(int argc, char* argv[]) {
     onion_url_add(urls, "^$", index);
 	onion_url_add(urls, "^chord/(.*)", chord);
 	onion_url_add(urls, "^notes$", notes);
+	
+	onion_url_add(urls, "^static/", opack_static);
 
     onion_listen(o);
     onion_free(o);

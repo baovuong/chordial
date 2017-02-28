@@ -7,5 +7,6 @@ assets.h
 *.wav
 *.midi
 *_html.c
+chordial_data.c
 
 chordial
