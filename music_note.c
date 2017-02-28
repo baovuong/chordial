@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAX_MIDI_VALUE 127
+#define MIN_MIDI_VALUE 0
+
 const char* pitch_class_names[] = {"C","C#","D","D#","E","F","F#","G","G#","A","A#","B"};
 
 music_note_t* music_note_new() {
@@ -21,7 +24,7 @@ music_note_t* music_note_new2(enum pitch_class pitch_class, unsigned int octave)
     
     // check if it's a valid music note, based on 
     unsigned int midi_value = music_note_to_midi_value(*music_note);
-    return midi_value >= 0 && midi_valud <= 127 ? music_note : NULL;
+    return midi_value >= MIN_MIDI_VALUE && midi_value <= MAX_MIDI_VALUE ? music_note : NULL;
 }
 
 void music_note_free(music_note_t* music_note) {
