@@ -7,7 +7,7 @@ set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -std=c99")
 set (CMAKE_REQUIRED_INCLUDES /usr/local/include)
 
 # output
-add_executable (chordial main.c chord.c)
+add_executable (chordial main.c music_note.c interval.c chord.c)
 
 # libraries
 find_package (FluidSynth REQUIRED)

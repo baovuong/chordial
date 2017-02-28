@@ -3,57 +3,13 @@
 
 #include <json/json.h>
 
-enum pitch_class {
-    C,
-    C_SHARP,
-    D,
-    D_SHARP,
-    E,
-    F,
-    F_SHARP,
-    G,
-    G_SHARP,
-    A,
-    A_SHARP,
-    B
-};
-
-enum quality {
-    PERFECT,
-    MAJOR,
-    MINOR,
-    AUGMENTED,
-    DIMINISHED
-};
-
-// Music Note class
-struct music_note {
-    enum pitch_class pitch_class;
-    unsigned int octave;
-};
-typedef struct music_note_t;
-
-// constructors
-music_note_t* music_note_new();
-music_note_t* music_note_new1(enum pitch_class pitch_class);
-music_note_t* music_note_new2(enum pitch_class pitch_class, unsigned int octave);
-
-unsigned int music_note_to_midi_value(music_note_t);
-const char* music_note_to_string(music_note_t);
-
-
-// Interval class
-struct interval {
-    enum quality quality;
-    unsigned int number;
-};
-typedef struct interval interval_t;
-
+#include "music_note.h"
+#include "interval.h"
 
 // Chord class
 struct chord {
-    music_note_t root_note;
-    interval_t* intervals;
+    music_note_t root;
+    interval_t intervals[10];
     int intervalc;
 };
 typedef struct chord chord_t;
@@ -70,7 +26,7 @@ void chord_add_interval(interval_t interval);
 const char* chord_to_string(chord_t* chord);
 
 // to json object
-void chord_to_json_object(chord_t* chord, struct json_object** jchord);
+void chord_to_json_object(chord_t* chord, struct json_object* jchord);
 
 unsigned int* chord_notes(chord_t* chord);
 unsigned int* chord_notes1(chord_t* chord, unsigned char octave);

@@ -8,7 +8,7 @@
 // using this for reference:
 // https://en.wikipedia.org/wiki/List_of_chords
 
-char* pitch_class_names[] = {"C","C#","D","D#","E","F","F#","G","G#","A","A#","B"};
+
 char* chord_quality_values[] = {"maj","min","aug","dim","dom"};
 const char* chord_quality_names[] = {
     "major",
@@ -65,19 +65,13 @@ int find_string(int array_length, char* array[], const char* value) {
 // constructors
 
 chord_t* chord_new() {
-    return chord_new1(0);
+    music_note_t root = {C, 4};
+    return chord_new1(root);
 }
-chord_t* chord_new1(music_note_t key) {
-    return chord_new2(key, 0);
-}
-chord_t* chord_new2(music_note_t key, chord_quality_t chord_quality) {
-    return chord_new3(key, chord_quality, 3);
-}
-chord_t* chord_new3(music_note_t key, chord_quality_t chord_quality, unsigned int interval) {
+chord_t* chord_new1(music_note_t root) {
     chord_t* chord = (chord_t*)malloc(sizeof(chord_t));
-    chord->key = key;
-    chord->chord_quality = chord_quality;
-    chord->interval = interval % 14;
+    chord->intervalc = 0;
+    chord->root = root;
     return chord;
 }
 
@@ -85,7 +79,11 @@ chord_t* chord_new_as_string(const char* name) {
     return NULL;
 }
 
-const char* chord_str(chord_t* chord) {
+void chord_add_interval(interval_t interval) {
+    
+}
+
+const char* chord_to_string(chord_t* chord) {
     return "a chord";
 }
 
@@ -98,14 +96,12 @@ unsigned int* chord_notes_with_octave(chord_t* chord, unsigned char octave) {
 }
 
 
-void chord_to_json_object(chord_t* chord, struct json_object** jchord) {
-    if (*jchord != NULL) {
-        free(*jchord);
+void chord_to_json_object(chord_t* chord, struct json_object* jchord) {
+    if (jchord != NULL) {
+        free(jchord);
     }
-    *jchord = json_object_new_object();
-    json_object_object_add(*jchord, "key", json_object_new_string(note_values[(int)chord->key]));
-    json_object_object_add(*jchord, "quality", json_object_new_string(chord_quality_names[(int)chord->chord_quality]));
-    json_object_object_add(*jchord, "interval", json_object_new_int(chord->interval));
+    jchord = json_object_new_object();
+    json_object_object_add(jchord, "root", json_object_new_string(music_note_to_string(chord->root)));
 }
 
 void chord_free(chord_t* chord) {
