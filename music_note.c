@@ -18,7 +18,10 @@ music_note_t* music_note_new2(enum pitch_class pitch_class, unsigned int octave)
     music_note_t* music_note = (music_note_t*)malloc(sizeof(music_note_t));
     music_note->pitch_class = pitch_class;
     music_note->octave = octave > 10 ? 10 : octave;
-    return music_note;
+    
+    // check if it's a valid music note, based on 
+    unsigned int midi_value = music_note_to_midi_value(*music_note);
+    return midi_value >= 0 && midi_valud <= 127 ? music_note : NULL;
 }
 
 void music_note_free(music_note_t* music_note) {
