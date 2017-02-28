@@ -6,5 +6,6 @@ Makefile
 
 *.wav
 *.midi
+*_html.c
 
 chordial
