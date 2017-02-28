@@ -5,21 +5,12 @@ project (chordial)
 set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -std=c99")
 set (CMAKE_REQUIRED_INCLUDES /usr/local/include)
+set (CMAKE_VERBOSE_MAKEFILE ON)
 
 
 # output
-add_custom_command(
-    OUTPUT index_html.c
-    COMMAND otemplate index.html index_html.c
-    DEPENDS index.html
-)
-
-add_custom_command(
-    OUTPUT layout_html.c
-    COMMAND otemplate layout.html layout_html.c
-    DEPENDS layout.html
-)
-
+add_custom_command (OUTPUT layout_html.c COMMAND otemplate layout.html layout_html.c DEPENDS layout.html)
+add_custom_command (OUTPUT index_html.c COMMAND otemplate index.html index_html.c DEPENDS index.html layout_html.c)
 add_executable (chordial main.c music_note.c interval.c chord.c layout_html.c index_html.c)
 
 # libraries

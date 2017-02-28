@@ -14,8 +14,7 @@
 #include "chord.h"
 
 onion_connection_status index(void *p, onion_request *req, onion_response *res) {
-	onion_response_write0(res, "index page");
-    return OCS_PROCESSED;
+    return index_html_template(NULL, req, res);
 }
 
 onion_connection_status notes(void *p, onion_request *req, onion_response *res) {
