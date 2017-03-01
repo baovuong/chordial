@@ -21,7 +21,7 @@
 #include "chord.h"
 
 onion_connection_status notes(void *p, onion_request *req, onion_response *res) {
-	for (int i=0; i<11; i++) {
+    for (int i=0; i<11; i++) {
         for (int j=0; j<11; j++) {
             music_note_t note = {(enum pitch_class)j, i};
             onion_response_write0(res, music_note_to_string(note));
