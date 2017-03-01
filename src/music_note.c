@@ -27,6 +27,13 @@ music_note_t* music_note_new2(enum pitch_class pitch_class, unsigned int octave)
     return midi_value >= MIN_MIDI_VALUE && midi_value <= MAX_MIDI_VALUE ? music_note : NULL;
 }
 
+music_note_t* music_note_new_from_midi_value(unsigned int midi_value) {
+    if (midi_value >= MIN_MIDI_VALUE && midi_value <= MAX_MIDI_VALUE) {
+        return music_note_new2((enum pitch_class)midi_value % 12, midi_value / 12);
+    }
+    return NULL;
+}
+
 void music_note_free(music_note_t* music_note) {
     if (music_note != NULL) {
         free(music_note);
@@ -37,7 +44,7 @@ unsigned int music_note_to_midi_value(music_note_t music_note) {
     return music_note.octave * 12 + (int)music_note.pitch_class;
 }
 
-char* music_note_to_string(music_note_t music_note) {
+const char* music_note_to_string(music_note_t music_note) {
     char* result = (char*)calloc(5, sizeof(char));
     char buffer[3];
     strcpy(result, pitch_class_names[(int)music_note.pitch_class]);
