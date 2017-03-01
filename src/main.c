@@ -28,36 +28,34 @@ onion_connection_status notes(void *p, onion_request *req, onion_response *res) 
             onion_response_write0(res, ", ");
         }
         onion_response_write0(res, "<br/>");
-	}
-	return OCS_PROCESSED;
+    }
+    return OCS_PROCESSED;
 }
 
 onion_connection_status api_notes(void *p, onion_request *req, onion_response *res) {
-	struct json_object* notes = json_object_new_array();
-	music_note_t* note;
-	struct json_object* note_json;
-	
-	for (unsigned int i=0; i<128; i++) {
+    struct json_object* notes = json_object_new_array();
+    music_note_t* note;
+    struct json_object* note_json;
+    for (unsigned int i=0; i<128; i++) {
         note = music_note_new_from_midi_value(i);
         if (note != NULL) {
             music_note_to_json_object(*note, &note_json);
             json_object_array_add(notes, note_json);
         }
-	}
+    }
+    onion_response_set_header(res, "Content-Type", "application/json");
+    onion_response_write0(res, json_object_to_json_string(notes));
 	
-	onion_response_set_header(res, "Content-Type", "application/json");
-	onion_response_write0(res, json_object_to_json_string(notes));
-	
-	// cleanup
-	free(notes);
-	music_note_free(note);
-	free(note_json);
-	return OCS_PROCESSED;
+    // cleanup
+    free(notes);
+    music_note_free(note);
+    free(note_json);
+    return OCS_PROCESSED;
 }
 
 onion_connection_status chord(void *p, onion_request *req, onion_response *res) {
     chord_t* chord = NULL;
-	struct json_object* json = NULL;
+    struct json_object* json = NULL;
     if (onion_request_get_query(req, "1")) {
         chord = chord_new_as_string(onion_request_get_query(req, "1"));
         if (chord == NULL) {
