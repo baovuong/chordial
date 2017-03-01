@@ -20,10 +20,6 @@
 #include "music_note.h"
 #include "chord.h"
 
-onion_connection_status index(void *p, onion_request *req, onion_response *res) {
-    return index_html_template(NULL, req, res);
-}
-
 onion_connection_status notes(void *p, onion_request *req, onion_response *res) {
 	for (int i=0; i<11; i++) {
 		for (int j=0; j<11; j++) {
@@ -97,6 +93,9 @@ void on_exit(int _) {
     }
 }
 
+// views
+int index_html_template(void *, onion_request *req, onion_response *res);
+
 int main(int argc, char* argv[]) {
 	
 	signal(SIGINT,on_exit);
@@ -111,7 +110,7 @@ int main(int argc, char* argv[]) {
 
     // urls
     onion_url *urls=onion_root_url(o);
-    onion_url_add(urls, "^$", index);
+    onion_url_add(urls, "", (void*)index_html_template);
 	
 	onion_url_add(urls, "^chord/(.*)", chord);
 	onion_url_add(urls, "^notes$", notes);
