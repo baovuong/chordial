@@ -22,12 +22,12 @@
 
 onion_connection_status notes(void *p, onion_request *req, onion_response *res) {
 	for (int i=0; i<11; i++) {
-		for (int j=0; j<11; j++) {
-			music_note_t note = {(enum pitch_class)j, i};
-			onion_response_write0(res, music_note_to_string(note));
-			onion_response_write0(res, ", ");
-		}
-		onion_response_write0(res, "<br/>");
+        for (int j=0; j<11; j++) {
+            music_note_t note = {(enum pitch_class)j, i};
+            onion_response_write0(res, music_note_to_string(note));
+            onion_response_write0(res, ", ");
+        }
+        onion_response_write0(res, "<br/>");
 	}
 	return OCS_PROCESSED;
 }
@@ -38,11 +38,11 @@ onion_connection_status api_notes(void *p, onion_request *req, onion_response *r
 	struct json_object* note_json;
 	
 	for (unsigned int i=0; i<128; i++) {
-		note = music_note_new_from_midi_value(i);
-		if (note != NULL) {
-			music_note_to_json_object(*note, &note_json);
-			json_object_array_add(notes, note_json);
-		}			
+        note = music_note_new_from_midi_value(i);
+        if (note != NULL) {
+            music_note_to_json_object(*note, &note_json);
+            json_object_array_add(notes, note_json);
+        }
 	}
 	
 	onion_response_set_header(res, "Content-Type", "application/json");
@@ -60,12 +60,12 @@ onion_connection_status chord(void *p, onion_request *req, onion_response *res) 
 	struct json_object* json = NULL;
     if (onion_request_get_query(req, "1")) {
         chord = chord_new_as_string(onion_request_get_query(req, "1"));
-		if (chord == NULL) {
-			json = json_object_new_object();
-			json_object_object_add(json, "message", json_object_new_string("malformed chord"));
-		} else {
-			chord_to_json_object(chord, json);
-		}
+        if (chord == NULL) {
+            json = json_object_new_object();
+            json_object_object_add(json, "message", json_object_new_string("malformed chord"));
+        } else {
+            chord_to_json_object(chord, json);
+        }
         
     } else {
         json = json_object_new_object();
@@ -97,26 +97,23 @@ void on_exit(int _) {
 int index_html_template(void *, onion_request *req, onion_response *res);
 
 int main(int argc, char* argv[]) {
-	
-	signal(SIGINT,on_exit);
-	signal(SIGTERM,on_exit);
-	
-	ONION_VERSION_IS_COMPATIBLE_OR_ABORT();
-	
+    signal(SIGINT,on_exit);
+    signal(SIGTERM,on_exit);
+    ONION_VERSION_IS_COMPATIBLE_OR_ABORT();
     o = onion_new(O_POOL);
     onion_set_timeout(o, 5000);
-	onion_set_hostname(o,"0.0.0.0");
-	onion_set_port(o, "9077");
+    onion_set_hostname(o,"0.0.0.0");
+    onion_set_port(o, "9077");
 
     // urls
     onion_url *urls=onion_root_url(o);
     onion_url_add(urls, "", (void*)index_html_template);
-	
-	onion_url_add(urls, "^chord/(.*)", chord);
-	onion_url_add(urls, "^notes$", notes);
-	onion_url_add(urls, "^api/notes$", api_notes);
-	
-	onion_url_add(urls, "^static/", opack_static);
+    
+    onion_url_add(urls, "^chord/(.*)", chord);
+    onion_url_add(urls, "^notes$", notes);
+    onion_url_add(urls, "^api/notes$", api_notes);
+
+    onion_url_add(urls, "^static/", opack_static);
 
     onion_listen(o);
     onion_free(o);
