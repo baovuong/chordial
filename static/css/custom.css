@@ -1,0 +1,20 @@
+#header {
+    background-color: #339933;
+    color: #e6e6e6;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+#header h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
