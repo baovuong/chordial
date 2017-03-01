@@ -12,7 +12,7 @@ set (CMAKE_REQUIRED_INCLUDES /usr/local/include)
 add_custom_command (OUTPUT layout_html.c COMMAND otemplate views/layout.html layout_html.c DEPENDS views/layout.html)
 add_custom_command (OUTPUT index_html.c COMMAND otemplate views/index.html index_html.c DEPENDS views/index.html layout_html.c)
 add_custom_command (OUTPUT chordial_data.c COMMAND opack static -o chordial_data.c DEPENDS static/*)
-add_executable (chordial main.c music_note.c interval.c chord.c chordial_data.c layout_html.c index_html.c)
+add_executable (chordial src/main.c src/music_note.c src/interval.c src/chord.c chordial_data.c layout_html.c index_html.c)
 
 # libraries
 find_package (FluidSynth REQUIRED)

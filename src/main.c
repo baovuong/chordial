@@ -14,7 +14,7 @@
 
 #include <json/json.h>
 
-#include "assets.h"
+#include "../assets.h"
 
 #include "music_note.h"
 #include "chord.h"
