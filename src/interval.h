@@ -18,5 +18,6 @@ struct interval {
 typedef struct interval interval_t;
 
 
+const char* interval_to_string(interval_t);
 void interval_to_json_object(interval_t, struct json_object*);
 #endif
