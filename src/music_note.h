@@ -36,5 +36,5 @@ void music_note_free(music_note_t*);
 
 unsigned int music_note_to_midi_value(music_note_t);
 const char* music_note_to_string(music_note_t);
-void music_note_to_json_object(music_note_t, struct json_object*);
+void music_note_to_json_object(music_note_t, struct json_object**);
 #endif

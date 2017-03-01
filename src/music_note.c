@@ -53,6 +53,8 @@ const char* music_note_to_string(music_note_t music_note) {
     return result;
 }
 
-void music_note_to_json_object(music_note_t music_note, struct json_object* jobj) {
-    jobj = json_object_new_object();
+void music_note_to_json_object(music_note_t music_note, struct json_object** jobj) {
+    *jobj = json_object_new_object();
+    json_object_object_add(*jobj, "pitchClass", json_object_new_string(pitch_class_names[(int)music_note.pitch_class]));
+    json_object_object_add(*jobj, "octave", json_object_new_int(music_note.octave));
 }

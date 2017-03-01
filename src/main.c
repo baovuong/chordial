@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <signal.h>
+
 #include <onion/log.h>
 #include <onion/onion.h>
 #include <onion/block.h>
@@ -32,6 +33,29 @@ onion_connection_status notes(void *p, onion_request *req, onion_response *res) 
 		}
 		onion_response_write0(res, "<br/>");
 	}
+	return OCS_PROCESSED;
+}
+
+onion_connection_status api_notes(void *p, onion_request *req, onion_response *res) {
+	struct json_object* notes = json_object_new_array();
+	music_note_t* note;
+	struct json_object* note_json;
+	
+	for (unsigned int i=0; i<128; i++) {
+		note = music_note_new_from_midi_value(i);
+		if (note != NULL) {
+			music_note_to_json_object(*note, &note_json);
+			json_object_array_add(notes, note_json);
+		}			
+	}
+	
+	onion_response_set_header(res, "Content-Type", "application/json");
+	onion_response_write0(res, json_object_to_json_string(notes));
+	
+	// cleanup
+	free(notes);
+	music_note_free(note);
+	free(note_json);
 	return OCS_PROCESSED;
 }
 
@@ -88,8 +112,10 @@ int main(int argc, char* argv[]) {
     // urls
     onion_url *urls=onion_root_url(o);
     onion_url_add(urls, "^$", index);
+	
 	onion_url_add(urls, "^chord/(.*)", chord);
 	onion_url_add(urls, "^notes$", notes);
+	onion_url_add(urls, "^api/notes$", api_notes);
 	
 	onion_url_add(urls, "^static/", opack_static);
 
