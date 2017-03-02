@@ -58,5 +58,9 @@ void interval_to_json_object(interval_t interval, struct json_object** jobj) {
 }
 
 const char* interval_to_string(interval_t interval) {
-    return NULL;
+    char* result = (char*)calloc(3, sizeof(char));
+    *result = quality_names_short[(int)interval.quality];
+    *(result+1) = (char)('0' + interval.number);
+    *(result+2) = '\0';
+    return result;
 }
