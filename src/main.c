@@ -53,6 +53,30 @@ onion_connection_status api_notes(void *p, onion_request *req, onion_response *r
     return OCS_PROCESSED;
 }
 
+onion_connection_status api_intervals(void *p, onion_request *req, onion_response *res) {
+    struct json_object* interval_checks = json_object_new_array();
+    interval_t* interval;
+    struct json_object* interval_json;
+    for (int i=0; i<5; i++) {
+        for (unsigned int j=1; j<=8; j++) {
+            interval = interval_new((enum quality)i, j);    
+            if (interval != NULL) {
+                interval_to_json_object(*interval, &interval_json);
+                json_object_array_add(interval_checks, interval_json);
+            } 
+            
+        }
+    }
+
+    onion_response_set_header(res, "Content-Type", "application/json");
+    onion_response_write0(res, json_object_to_json_string(interval_checks));
+    
+    free(interval_checks);
+    interval_free(interval);
+    free(interval_json);
+    return OCS_PROCESSED;
+}
+
 onion_connection_status chord(void *p, onion_request *req, onion_response *res) {
     chord_t* chord = NULL;
     struct json_object* json = NULL;
@@ -114,6 +138,7 @@ int main(int argc, char* argv[]) {
     onion_url_add(urls, "^chord/(.*)", chord);
     onion_url_add(urls, "^notes$", notes);
     onion_url_add(urls, "^api/notes$", api_notes);
+    onion_url_add(urls, "^api/intervals$", api_intervals);
     onion_url_add(urls, "^static/", opack_static);
 
     // start
