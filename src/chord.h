@@ -6,10 +6,12 @@
 #include "music_note.h"
 #include "interval.h"
 
+#define INTERVAL_MAX 10
+
 // Chord class
 struct chord {
     music_note_t root;
-    interval_t intervals[10];
+    interval_t intervals[INTERVAL_MAX];
     int intervalc;
 };
 typedef struct chord chord_t;
@@ -20,7 +22,8 @@ chord_t* chord_new1(music_note_t root);
 //chord_t* chord_new2(music_note_t root, interval_t interval);
 chord_t* chord_new_as_string(const char* name);
 
-void chord_add_interval(interval_t interval);
+void chord_add_interval(chord_t* chord, interval_t interval);
+void chord_remove_interval(chord_t* chord, interval_t interval);
 
 // to string
 const char* chord_to_string(chord_t* chord);

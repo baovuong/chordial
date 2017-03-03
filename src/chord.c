@@ -41,9 +41,9 @@ char* known_chord_interval_names[] = {
 
 // https://en.wikipedia.org/wiki/Chord_names_and_symbols_(popular_music)
 interval_t known_chord_intervals[9][6] = {
-    { {MAJOR, 3}, {PERFECT, 5}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // maj
-    { {MINOR, 3}, {PERFECT, 5}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // min
-    { {MAJOR, 3}, {AUGMENTED, 5}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // aug
+    { {MAJOR, 3}, {PERFECT, 5}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // maj
+    { {MINOR, 3}, {PERFECT, 5}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // min
+    { {MAJOR, 3}, {AUGMENTED, 5}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // aug
     { {MINOR, 3}, {DIMINISHED, 5}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // dim
     { {MAJOR, 3}, {PERFECT, 5}, {MAJOR, 6}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // maj6
     { {MINOR, 3}, {PERFECT, 5}, {MAJOR, 6}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // min6
@@ -79,8 +79,12 @@ chord_t* chord_new_as_string(const char* name) {
     return NULL;
 }
 
-void chord_add_interval(interval_t interval) {
-    
+void chord_add_interval(chord_t* chord, interval_t interval) {
+    if (chord->intervalc < INTERVAL_MAX) {
+        // add
+        chord->intervals[chord->intervalc] = interval;
+        chord->intervalc++;
+    }
 }
 
 const char* chord_to_string(chord_t* chord) {
