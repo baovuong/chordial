@@ -5,7 +5,7 @@
 
 char quality_names_short[] = { 'P', 'M', 'm', 'a', 'd' };
 
-int number_mapping[5][7] = {
+int number_mapping[][7] = {
     {1, 5, 8, 0, 0, 0, 0},
     {2, 3, 6, 7, 0, 0, 0},
     {2, 3, 6, 7, 0, 0, 0},
@@ -23,6 +23,7 @@ const char* quality_names_long[] = {
     "diminished"
 };
 
+int quality_values[] = {0,1,0,2,-1};
 interval_t* interval_new(enum quality quality, unsigned int number) {
     interval_t* interval = NULL;
     
