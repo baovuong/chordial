@@ -26,17 +26,17 @@ const char* quality_names_long[] = {
 int quality_values[] = {0,1,0,2,-1};
 interval_t* interval_new(enum quality quality, unsigned int number) {
     interval_t* interval = NULL;
-    
+
     // check if number is in between 1 and 8
     if (number >= 1 && number <= 8) {
-        // check mapping 
+        // check mapping
         int index = -1;
         for (int i=0; number_mapping[(int)quality][i] != 0 && i<7; i++) {
             if (number_mapping[(int)quality][i] == number) {
                 index = i;
                 break;
             }
-        }       
+        }
         if (index > -1) {
             interval = (interval_t*)malloc(sizeof(interval_t));
             interval->quality = quality;
@@ -50,6 +50,10 @@ void interval_free(interval_t* interval) {
     if (interval != NULL) {
         free(interval);
     }
+}
+
+unsigned int interval_get_semitones(interval_t interval) {
+    return 0;
 }
 
 void interval_to_json_object(interval_t interval, struct json_object** jobj) {
