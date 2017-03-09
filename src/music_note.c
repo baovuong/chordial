@@ -41,13 +41,13 @@ void music_note_free(music_note_t* music_note) {
 }
 
 unsigned int music_note_to_midi_value(music_note_t music_note) {
-    return music_note.octave * 12 + (int)music_note.pitch_class;
+    return music_note.octave * 12 + music_note.pitch_class;
 }
 
 const char* music_note_to_string(music_note_t music_note) {
     char* result = (char*)calloc(5, sizeof(char));
     char buffer[3];
-    strcpy(result, pitch_class_names[(int)music_note.pitch_class]);
+    strcpy(result, pitch_class_names[music_note.pitch_class]);
     sprintf(buffer, "%d", music_note.octave);
     strcat(result, buffer);
     return result;
@@ -55,6 +55,6 @@ const char* music_note_to_string(music_note_t music_note) {
 
 void music_note_to_json_object(music_note_t music_note, struct json_object** jobj) {
     *jobj = json_object_new_object();
-    json_object_object_add(*jobj, "pitchClass", json_object_new_string(pitch_class_names[(int)music_note.pitch_class]));
+    json_object_object_add(*jobj, "pitchClass", json_object_new_string(pitch_class_names[music_note.pitch_class]));
     json_object_object_add(*jobj, "octave", json_object_new_int(music_note.octave));
 }
