@@ -12,13 +12,27 @@ void music_note_to_midi_value_test(void) {
 }
 
 void interval_get_semitones_test(void) {
-    interval_t interval1 = {MAJOR, 3};
-    interval_t interval2 = {MINOR, 3};
+    interval_t M3 = {MAJOR, 3};
+    interval_t m3 = {MINOR, 3};
+    interval_t d3 = {DIMINISHED, 3};
+    interval_t A3 = {AUGMENTED, 3};
+    
 
-    CU_ASSERT_EQUAL(4, interval_get_semitones(interval1));
-    CU_ASSERT_EQUAL(3, interval_get_semitones(interval2));
+    CU_ASSERT_EQUAL(4, interval_get_semitones(M3));
+    CU_ASSERT_EQUAL(3, interval_get_semitones(m3));
+    CU_ASSERT_EQUAL(2, interval_get_semitones(d3));
+    CU_ASSERT_EQUAL(5, interval_get_semitones(A3));
 }
 
+void interval_new_test(void) {
+    interval_t* M3 = interval_new(MAJOR, 3);
+    interval_t* P3 = interval_new(PERFECT, 3);
+    
+    CU_ASSERT_PTR_NOT_NULL(M3);
+    CU_ASSERT_PTR_NULL(P3);
+    
+    interval_free(M3);
+}
 
 int main (int argc, char** argv) {
 
@@ -37,7 +51,8 @@ int main (int argc, char** argv) {
 
    /* add the tests to the suite */
    if (NULL == CU_add_test(pSuite, "Midi Notes", music_note_to_midi_value_test) ||
-       NULL == CU_add_test(pSuite, "Interval to semitones", interval_get_semitones_test)) {
+       NULL == CU_add_test(pSuite, "Interval to semitones", interval_get_semitones_test) ||
+       NULL == CU_add_test(pSuite, "Interval Constructor", interval_new_test)) {
       CU_cleanup_registry();
       return CU_get_error();
    }
