@@ -11,6 +11,7 @@ void music_note_to_midi_value_test(void) {
     CU_ASSERT_EQUAL(57, music_note_to_midi_value(concert_a));
 }
 
+// interval 
 void interval_get_semitones_test(void) {
     interval_t M3 = {MAJOR, 3};
     interval_t m3 = {MINOR, 3};
@@ -32,27 +33,34 @@ void interval_new_test(void) {
     CU_ASSERT_PTR_NULL(P3);
     
     interval_free(M3);
+    
 }
 
+void test_test(void) {
+    
+}
+
+
 int main (int argc, char** argv) {
+    CU_pSuite pSuite = NULL;
 
-        CU_pSuite pSuite = NULL;
+    /* initialize the CUnit test registry */
+    if (CUE_SUCCESS != CU_initialize_registry())
+        return CU_get_error();
 
-        /* initialize the CUnit test registry */
-   if (CUE_SUCCESS != CU_initialize_registry())
-      return CU_get_error();
-
-   /* add a suite to the registry */
-   pSuite = CU_add_suite("Suite_1", NULL, NULL);
-   if (NULL == pSuite) {
-      CU_cleanup_registry();
-      return CU_get_error();
+    /* add a suite to the registry */
+    pSuite = CU_add_suite("Suite_1", NULL, NULL);
+    if (NULL == pSuite) {
+        CU_cleanup_registry();
+        return CU_get_error();
    }
 
-   /* add the tests to the suite */
-   if (NULL == CU_add_test(pSuite, "Midi Notes", music_note_to_midi_value_test) ||
-       NULL == CU_add_test(pSuite, "Interval to semitones", interval_get_semitones_test) ||
-       NULL == CU_add_test(pSuite, "Interval Constructor", interval_new_test)) {
+    /* add the tests to the suite */
+    int check = 0;
+    check = check || NULL == CU_add_test(pSuite, "Midi Notes", music_note_to_midi_value_test);
+    check = check || NULL == CU_add_test(pSuite, "Interval to semitones", interval_get_semitones_test);
+    check = check || NULL == CU_add_test(pSuite, "Interval Constructor", interval_new_test);
+    if (check) {
       CU_cleanup_registry();
       return CU_get_error();
    }

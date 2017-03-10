@@ -127,7 +127,7 @@ int main(int argc, char* argv[]) {
     ONION_VERSION_IS_COMPATIBLE_OR_ABORT();
     
     // setup
-    o = onion_new(O_POOL);
+    o = onion_new(O_POOL | O_SYSTEMD);
     onion_set_timeout(o, 5000);
     onion_set_hostname(o,"0.0.0.0");
     onion_set_port(o, "9077");
