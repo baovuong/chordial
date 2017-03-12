@@ -61,6 +61,22 @@ void chord_new_test(void) {
     chord_free(d_minor_seventh);
 }
 
+void chord_contains_interval_test(void) {
+    interval_t major_third_interval = {MAJOR, 3};
+    interval_t perfect_fifth_interval = {PERFECT, 5};
+    interval_t minor_seventh_interval = {MINOR, 7};  
+    interval_t minor_third_interval = {MINOR, 3};
+    music_note_t e5 = {E, 5};
+    
+    chord_t* e_dominant_seventh = chord_new2(E, DOMINANT_SEVENTH);
+    CU_ASSERT_TRUE(chord_contains_interval(e_dominant_seventh, major_third_interval));
+    CU_ASSERT_TRUE(chord_contains_interval(e_dominant_seventh, perfect_fifth_interval));
+    CU_ASSERT_TRUE(chord_contains_interval(e_dominant_seventh, minor_seventh_interval));
+    CU_ASSERT_FALSE(chord_contains_interval(e_dominant_seventh, minor_third_interval));
+    
+    chord_free(e_dominant_seventh);
+}
+
 
 int main (int argc, char** argv) {
     CU_pSuite pSuite = NULL;
@@ -82,6 +98,7 @@ int main (int argc, char** argv) {
     check = check || NULL == CU_add_test(pSuite, "Interval to semitones", interval_get_semitones_test);
     check = check || NULL == CU_add_test(pSuite, "Interval Constructor", interval_new_test);
     check = check || NULL == CU_add_test(pSuite, "Chord Construction", chord_new_test);
+    check = check || NULL == CU_add_test(pSuite, "finding intervals in chords", chord_contains_interval_test);
     if (check) {
       CU_cleanup_registry();
       return CU_get_error();
