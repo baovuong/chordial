@@ -80,7 +80,7 @@ chord_t* chord_new1(music_note_t root) {
 chord_t* chord_new2(music_note_t root, enum chord_quality chord_quality) {
     chord_t* chord = (chord_t*)malloc(sizeof(chord_t));
     chord->root = root;
-    
+
     // set intervals from the chord_quality
     chord->intervalc = 0;
     for (int i=0; !interval_equals(known_chord_intervals[chord_quality][i], perfect_unison); i++) {
@@ -90,7 +90,7 @@ chord_t* chord_new2(music_note_t root, enum chord_quality chord_quality) {
 }
 
 chord_t* chord_new_as_string(const char* name) {
-    // parse through string 
+    // parse through string
     int state = 0;
     int i = 0;
     char c;
@@ -138,6 +138,16 @@ void chord_add_interval(chord_t* chord, interval_t interval) {
         chord->intervals[chord->intervalc] = interval;
         chord->intervalc++;
     }
+}
+
+int chord_contains_interval(chord_t* chord, interval_t interval) {
+    // search
+    for (int i=0; i<chord->intervalc; i++) {
+        if (interval_equals(interval, chord->intervals[i])) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 const char* chord_to_string(chord_t* chord) {

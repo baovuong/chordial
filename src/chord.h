@@ -39,6 +39,7 @@ chord_t* chord_new_as_string(const char* name);
 
 void chord_add_interval(chord_t* chord, interval_t interval);
 void chord_remove_interval(chord_t* chord, interval_t interval);
+int chord_contains_interval(chord_t* chord, interval_t interval);
 
 // to string
 const char* chord_to_string(chord_t* chord);

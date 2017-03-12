@@ -12,13 +12,13 @@ void music_note_to_midi_value_test(void) {
     CU_ASSERT_EQUAL(57, music_note_to_midi_value(concert_a));
 }
 
-// interval 
+// interval
 void interval_get_semitones_test(void) {
     interval_t M3 = {MAJOR, 3};
     interval_t m3 = {MINOR, 3};
     interval_t d3 = {DIMINISHED, 3};
     interval_t A3 = {AUGMENTED, 3};
-    
+
 
     CU_ASSERT_EQUAL(4, interval_get_semitones(M3));
     CU_ASSERT_EQUAL(3, interval_get_semitones(m3));
@@ -29,12 +29,12 @@ void interval_get_semitones_test(void) {
 void interval_new_test(void) {
     interval_t* M3 = interval_new(MAJOR, 3);
     interval_t* P3 = interval_new(PERFECT, 3);
-    
+
     CU_ASSERT_PTR_NOT_NULL(M3);
     CU_ASSERT_PTR_NULL(P3);
-    
+
     interval_free(M3);
-    
+
 }
 
 // chord construction
@@ -43,20 +43,20 @@ void chord_new_test(void) {
     interval_t major_third_interval = {MAJOR, 3};
     interval_t perfect_fifth_interval = {PERFECT, 5};
     interval_t minor_seventh_interval = {MINOR, 7};
-    
+
     music_note_t c1 = {C, 1};
     music_note_t d4 = {D, 4};
-    
+
     // major third triad
     chord_t* c_major_triad = chord_new1(c1);
     CU_ASSERT_EQUAL(c_major_triad->intervalc, 2);
     CU_ASSERT_TRUE(interval_equals(c_major_triad->intervals[0], major_third_interval));
     CU_ASSERT_TRUE(interval_equals(c_major_triad->intervals[1], perfect_fifth_interval));
-    
+
     // minor seventh
     chord_t* d_minor_seventh = chord_new2(d4, MINOR_SEVENTH);
     CU_ASSERT_EQUAL(d_minor_seventh->intervalc, 3);
-    
+
     chord_free(c_major_triad);
     chord_free(d_minor_seventh);
 }
@@ -64,16 +64,16 @@ void chord_new_test(void) {
 void chord_contains_interval_test(void) {
     interval_t major_third_interval = {MAJOR, 3};
     interval_t perfect_fifth_interval = {PERFECT, 5};
-    interval_t minor_seventh_interval = {MINOR, 7};  
+    interval_t minor_seventh_interval = {MINOR, 7};
     interval_t minor_third_interval = {MINOR, 3};
     music_note_t e5 = {E, 5};
-    
-    chord_t* e_dominant_seventh = chord_new2(E, DOMINANT_SEVENTH);
+
+    chord_t* e_dominant_seventh = chord_new2(e5, DOMINANT_SEVENTH);
     CU_ASSERT_TRUE(chord_contains_interval(e_dominant_seventh, major_third_interval));
     CU_ASSERT_TRUE(chord_contains_interval(e_dominant_seventh, perfect_fifth_interval));
     CU_ASSERT_TRUE(chord_contains_interval(e_dominant_seventh, minor_seventh_interval));
     CU_ASSERT_FALSE(chord_contains_interval(e_dominant_seventh, minor_third_interval));
-    
+
     chord_free(e_dominant_seventh);
 }
 
