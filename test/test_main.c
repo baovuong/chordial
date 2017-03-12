@@ -4,6 +4,7 @@
 
 #include "../src/music_note.h"
 #include "../src/interval.h"
+#include "../src/chord.h"
 
 // music note
 void music_note_to_midi_value_test(void) {
@@ -36,8 +37,28 @@ void interval_new_test(void) {
     
 }
 
-void test_test(void) {
+// chord construction
+void chord_new_test(void) {
+    interval_t minor_third_interval = {MINOR, 3};
+    interval_t major_third_interval = {MAJOR, 3};
+    interval_t perfect_fifth_interval = {PERFECT, 5};
+    interval_t minor_seventh_interval = {MINOR, 7};
     
+    music_note_t c1 = {C, 1};
+    music_note_t d4 = {D, 4};
+    
+    // major third triad
+    chord_t* c_major_triad = chord_new1(c1);
+    CU_ASSERT_EQUAL(c_major_triad->intervalc, 2);
+    CU_ASSERT_TRUE(interval_equals(c_major_triad->intervals[0], major_third_interval));
+    CU_ASSERT_TRUE(interval_equals(c_major_triad->intervals[1], perfect_fifth_interval));
+    
+    // minor seventh
+    chord_t* d_minor_seventh = chord_new2(d4, MINOR_SEVENTH);
+    CU_ASSERT_EQUAL(d_minor_seventh->intervalc, 3);
+    
+    chord_free(c_major_triad);
+    chord_free(d_minor_seventh);
 }
 
 
@@ -60,6 +81,7 @@ int main (int argc, char** argv) {
     check = check || NULL == CU_add_test(pSuite, "Midi Notes", music_note_to_midi_value_test);
     check = check || NULL == CU_add_test(pSuite, "Interval to semitones", interval_get_semitones_test);
     check = check || NULL == CU_add_test(pSuite, "Interval Constructor", interval_new_test);
+    check = check || NULL == CU_add_test(pSuite, "Chord Construction", chord_new_test);
     if (check) {
       CU_cleanup_registry();
       return CU_get_error();

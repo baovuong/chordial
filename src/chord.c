@@ -4,6 +4,9 @@
 
 #include "chord.h"
 
+#define NOTE_CHAR_MAX 3
+#define QUALITY_CHAR_MAX 6
+
 // using this for reference:
 // https://en.wikipedia.org/wiki/List_of_chords
 
@@ -38,17 +41,20 @@ char* known_chord_interval_names[] = {
     // "dim9",
 };
 
+interval_t perfect_unison = {PERFECT, 1};
+
+
 // https://en.wikipedia.org/wiki/Chord_names_and_symbols_(popular_music)
 interval_t known_chord_intervals[9][6] = {
     { {MAJOR, 3}, {PERFECT, 5}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // maj
     { {MINOR, 3}, {PERFECT, 5}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // min
     { {MAJOR, 3}, {AUGMENTED, 5}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // aug
-    { {MINOR, 3}, {DIMINISHED, 5}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // dim
-    { {MAJOR, 3}, {PERFECT, 5}, {MAJOR, 6}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // maj6
-    { {MINOR, 3}, {PERFECT, 5}, {MAJOR, 6}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // min6
-    { {MAJOR, 3}, {PERFECT, 5}, {MINOR, 7}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // dom7
-    { {MINOR, 3}, {PERFECT, 5}, {MAJOR, 7}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // maj7
-    { {MINOR, 3}, {PERFECT, 5}, {MINOR, 7}, {PERFECT, 0}, {PERFECT, 0}, {PERFECT, 0} }, // min7
+    { {MINOR, 3}, {DIMINISHED, 5}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // dim
+    { {MAJOR, 3}, {PERFECT, 5}, {MAJOR, 6}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // maj6
+    { {MINOR, 3}, {PERFECT, 5}, {MAJOR, 6}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // min6
+    { {MAJOR, 3}, {PERFECT, 5}, {MINOR, 7}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // dom7
+    { {MINOR, 3}, {PERFECT, 5}, {MAJOR, 7}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // maj7
+    { {MINOR, 3}, {PERFECT, 5}, {MINOR, 7}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // min7
 };
 
 // helper functions
@@ -77,7 +83,6 @@ chord_t* chord_new2(music_note_t root, enum chord_quality chord_quality) {
     
     // set intervals from the chord_quality
     chord->intervalc = 0;
-    interval_t perfect_unison = {PERFECT, 1};
     for (int i=0; !interval_equals(known_chord_intervals[chord_quality][i], perfect_unison); i++) {
         chord_add_interval(chord, known_chord_intervals[chord_quality][i]);
     }
@@ -85,6 +90,45 @@ chord_t* chord_new2(music_note_t root, enum chord_quality chord_quality) {
 }
 
 chord_t* chord_new_as_string(const char* name) {
+    // parse through string 
+    int state = 0;
+    int i = 0;
+    char c;
+    char* note_string;
+    char* quality_string;
+    while ((c = name[i]) != '\0') {
+        switch (state) {
+            case 0:
+                if (strchr("ABCDEFG", c) != NULL) {
+                    note_string = (char*)calloc(NOTE_CHAR_MAX, sizeof(char));
+                    note_string[0] = c;
+                    state = 1;
+                } else {
+                    state = 4;
+                }
+                break;
+            case 1:
+                if (strchr("#b", c) != NULL) {
+                    note_string[1] = c;
+                    state = 2;
+                } else {
+                    note_string[1] = '\0';
+                    quality_string = (char*)calloc(QUALITY_CHAR_MAX, sizeof(char));
+                    quality_string[0] = c;
+                    state = 3;
+                }
+                break;
+            case 2:
+                note_string[2] = '\0';
+                quality_string = (char*)calloc(QUALITY_CHAR_MAX, sizeof(char));
+                quality_string[0] = c;
+                break;
+            case 3:
+                break;
+            default:
+                break;
+        }
+    }
     return NULL;
 }
 
