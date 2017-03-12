@@ -8,6 +8,21 @@
 
 #define INTERVAL_MAX 10
 
+
+enum chord_quality {
+    MAJOR_TRIAD,
+    MINOR_TRIAD,
+    AUGMENTED_TRIAD,
+    DIMINISHED_TRIAD,
+    MAJOR_SIXTH,
+    MINOR_SIXTH,
+    DOMINANT_SEVENTH,
+    MAJOR_SEVENTH,
+    MINOR_SEVENTH
+};
+
+
+
 // Chord class
 struct chord {
     music_note_t root;
@@ -19,6 +34,7 @@ typedef struct chord chord_t;
 // constructors
 chord_t* chord_new();
 chord_t* chord_new1(music_note_t root);
+chord_t* chord_new2(music_note_t root, enum chord_quality chord_quality);
 //chord_t* chord_new2(music_note_t root, interval_t interval);
 chord_t* chord_new_as_string(const char* name);
 

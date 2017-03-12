@@ -64,4 +64,9 @@ const char* interval_to_string(interval_t interval) {
     return result;
 }
 
+int interval_equals(interval_t interval1, interval_t interval2) {
+    return interval1.quality == interval2.quality &&
+        interval1.number == interval2.number;
+}
+
 // helper functions

@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <json/json.h>
 
 #include "chord.h"
 
@@ -69,9 +68,19 @@ chord_t* chord_new() {
     return chord_new1(root);
 }
 chord_t* chord_new1(music_note_t root) {
+    return chord_new2(root, MAJOR_TRIAD);
+}
+
+chord_t* chord_new2(music_note_t root, enum chord_quality chord_quality) {
     chord_t* chord = (chord_t*)malloc(sizeof(chord_t));
-    chord->intervalc = 0;
     chord->root = root;
+    
+    // set intervals from the chord_quality
+    chord->intervalc = 0;
+    interval_t perfect_unison = {PERFECT, 1};
+    for (int i=0; !interval_equals(known_chord_intervals[chord_quality][i], perfect_unison); i++) {
+        chord_add_interval(chord, known_chord_intervals[chord_quality][i]);
+    }
     return chord;
 }
 
