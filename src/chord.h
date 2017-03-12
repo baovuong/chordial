@@ -35,7 +35,6 @@ typedef struct chord chord_t;
 chord_t* chord_new();
 chord_t* chord_new1(music_note_t root);
 chord_t* chord_new2(music_note_t root, enum chord_quality chord_quality);
-//chord_t* chord_new2(music_note_t root, interval_t interval);
 chord_t* chord_new_as_string(const char* name);
 
 void chord_add_interval(chord_t* chord, interval_t interval);
