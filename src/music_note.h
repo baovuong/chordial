@@ -19,11 +19,10 @@ enum pitch_class {
 };
 
 // Music Note class
-struct music_note {
+typedef struct music_note {
     enum pitch_class pitch_class;
     unsigned int octave;
-};
-typedef struct music_note music_note_t;
+} music_note_t;
 
 // constructors
 music_note_t* music_note_new();
@@ -37,4 +36,6 @@ void music_note_free(music_note_t*);
 unsigned int music_note_to_midi_value(music_note_t);
 const char* music_note_to_string(music_note_t);
 void music_note_to_json_object(music_note_t, struct json_object**);
+int music_note_compare(music_note_t, music_note_t);
+int music_note_equals(music_note_t, music_note_t);
 #endif

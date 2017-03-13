@@ -77,6 +77,25 @@ void chord_contains_interval_test(void) {
     chord_free(e_dominant_seventh);
 }
 
+void chord_get_notes_test(void) {
+    music_note_t c4 = {C, 4};
+    music_note_t e4 = {E, 4};
+    music_note_t g4 = {G, 4};
+    chord_t* cmajor = chord_new();
+
+    music_note_t* notes = chord_notes(cmajor);
+    CU_ASSERT_PTR_NOT_NULL_FATAL(notes);
+    
+    int count = cmajor->intervalc+1;
+
+    CU_ASSERT_TRUE(music_note_equals(c4, notes[0]));
+    CU_ASSERT_TRUE(music_note_equals(e4, notes[1]));
+    CU_ASSERT_TRUE(music_note_equals(g4, notes[2]));
+
+    free(notes);
+    chord_free(cmajor);
+}
+
 
 int main (int argc, char** argv) {
     CU_pSuite pSuite = NULL;
@@ -99,6 +118,7 @@ int main (int argc, char** argv) {
     check = check || NULL == CU_add_test(pSuite, "Interval Constructor", interval_new_test);
     check = check || NULL == CU_add_test(pSuite, "Chord Construction", chord_new_test);
     check = check || NULL == CU_add_test(pSuite, "finding intervals in chords", chord_contains_interval_test);
+    check = check || NULL == CU_add_test(pSuite, "generating music notes from chord", chord_get_notes_test);
     if (check) {
       CU_cleanup_registry();
       return CU_get_error();

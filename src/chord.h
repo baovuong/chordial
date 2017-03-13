@@ -24,12 +24,11 @@ enum chord_quality {
 
 
 // Chord class
-struct chord {
+typedef struct chord {
     music_note_t root;
     interval_t intervals[INTERVAL_MAX];
     int intervalc;
-};
-typedef struct chord chord_t;
+} chord_t;
 
 // constructors
 chord_t* chord_new();
@@ -47,8 +46,7 @@ const char* chord_to_string(chord_t* chord);
 // to json object
 void chord_to_json_object(chord_t* chord, struct json_object* jchord);
 
-unsigned int* chord_notes(chord_t* chord);
-unsigned int* chord_notes1(chord_t* chord, unsigned char octave);
+music_note_t* chord_notes(chord_t* chord);
 
 // destructor
 void chord_free(chord_t* chord);

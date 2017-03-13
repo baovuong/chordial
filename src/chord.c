@@ -43,7 +43,6 @@ char* known_chord_interval_names[] = {
 
 interval_t perfect_unison = {PERFECT, 1};
 
-
 // https://en.wikipedia.org/wiki/Chord_names_and_symbols_(popular_music)
 interval_t known_chord_intervals[9][6] = {
     { {MAJOR, 3}, {PERFECT, 5}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // maj
@@ -154,14 +153,20 @@ const char* chord_to_string(chord_t* chord) {
     return "a chord";
 }
 
-unsigned int* chord_notes(chord_t* chord) {
-    return NULL;
-}
+music_note_t* chord_notes(chord_t* chord) {
+    music_note_t* notes = (music_note_t*)calloc(chord->intervalc+1, sizeof(music_note_t));
 
-unsigned int* chord_notes_with_octave(chord_t* chord, unsigned char octave) {
-    return NULL;
+    // root note
+    notes[0] = chord->root;
+    for (int i=1; i<chord->intervalc+1; i++) {
+        music_note_t* note = music_note_new_from_midi_value(
+            music_note_to_midi_value(chord->root) +
+            interval_get_semitones(chord->intervals[i-1]));
+        notes[i] = *note;
+        music_note_free(note);
+    }
+    return notes;
 }
-
 
 void chord_to_json_object(chord_t* chord, struct json_object* jchord) {
     if (jchord != NULL) {

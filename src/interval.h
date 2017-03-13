@@ -11,11 +11,10 @@ enum quality {
     DIMINISHED
 };
 
-struct interval {
+typedef struct interval {
     enum quality quality;
     unsigned int number;
-};
-typedef struct interval interval_t;
+} interval_t;
 
 interval_t* interval_new(enum quality, unsigned int);
 

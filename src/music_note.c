@@ -21,8 +21,8 @@ music_note_t* music_note_new2(enum pitch_class pitch_class, unsigned int octave)
     music_note_t* music_note = (music_note_t*)malloc(sizeof(music_note_t));
     music_note->pitch_class = pitch_class;
     music_note->octave = octave > 10 ? 10 : octave;
-    
-    // check if it's a valid music note, based on 
+
+    // check if it's a valid music note, based on
     unsigned int midi_value = music_note_to_midi_value(*music_note);
     return midi_value >= MIN_MIDI_VALUE && midi_value <= MAX_MIDI_VALUE ? music_note : NULL;
 }
@@ -57,4 +57,12 @@ void music_note_to_json_object(music_note_t music_note, struct json_object** job
     *jobj = json_object_new_object();
     json_object_object_add(*jobj, "pitchClass", json_object_new_string(pitch_class_names[music_note.pitch_class]));
     json_object_object_add(*jobj, "octave", json_object_new_int(music_note.octave));
+}
+
+int music_note_compare(music_note_t note1, music_note_t note2) {
+    return music_note_to_midi_value(note1) - music_note_to_midi_value(note2);
+}
+
+int music_note_equals(music_note_t note1, music_note_t note2) {
+    return music_note_compare(note1, note2) == 0;
 }
