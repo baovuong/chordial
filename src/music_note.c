@@ -66,3 +66,5 @@ int music_note_compare(music_note_t note1, music_note_t note2) {
 int music_note_equals(music_note_t note1, music_note_t note2) {
     return music_note_compare(note1, note2) == 0;
 }
+
+

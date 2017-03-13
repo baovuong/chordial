@@ -78,6 +78,10 @@ onion_connection_status api_intervals(void *p, onion_request *req, onion_respons
 }
 
 onion_connection_status chord(void *p, onion_request *req, onion_response *res) {
+    if (OR_GET != (OR_METHODS & onion_request_get_flags(req))) {
+        onion_response_set_code(res, HTTP_METHOD_NOT_ALLOWED);
+        return OCS_PROCESSED;
+    }
     chord_t* chord = NULL;
     struct json_object* json = NULL;
     if (onion_request_get_query(req, "1")) {
@@ -103,6 +107,15 @@ onion_connection_status chord(void *p, onion_request *req, onion_response *res) 
     // cleanup
     chord_free(chord);
 
+    return OCS_PROCESSED;
+}
+
+onion_connection_status arg_test(void *p, onion_request *req, onion_response *res) {
+    if ((OR_METHODS & onion_request_get_flags(req)) == OR_GET) { 
+        onion_response_set_code(res, HTTP_OK);
+    } else {
+        onion_response_set_code(res, HTTP_METHOD_NOT_ALLOWED);
+    }
     return OCS_PROCESSED;
 }
 
@@ -140,6 +153,7 @@ int main(int argc, char* argv[]) {
     onion_url_add(urls, "^api/notes$", api_notes);
     onion_url_add(urls, "^api/intervals$", api_intervals);
     onion_url_add(urls, "^static/", opack_static);
+    onion_url_add(urls, "^arg-test$", arg_test);
 
     // start
     onion_listen(o);
