@@ -150,10 +150,12 @@ int main(int argc, char* argv[]) {
     onion_url_add(urls, "", (void*)index_html_template);
     onion_url_add(urls, "^chord/(.*)", chord);
     onion_url_add(urls, "^notes$", notes);
-    onion_url_add(urls, "^api/notes$", api_notes);
-    onion_url_add(urls, "^api/intervals$", api_intervals);
     onion_url_add(urls, "^static/", opack_static);
     onion_url_add(urls, "^arg-test$", arg_test);
+    
+    onion_url_add(urls, "^api/notes$", api_notes);
+    onion_url_add(urls, "^api/intervals$", api_intervals);
+    
 
     // start
     onion_listen(o);
