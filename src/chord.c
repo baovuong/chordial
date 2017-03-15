@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <regex.h>
+
 #include "chord.h"
 
 #define NOTE_CHAR_MAX 3
@@ -95,6 +97,7 @@ chord_t* chord_new_as_string(const char* name) {
     char c;
     char* note_string;
     char* quality_string;
+    int qsi = 1;
     while ((c = name[i]) != '\0') {
         switch (state) {
             case 0:
@@ -123,11 +126,37 @@ chord_t* chord_new_as_string(const char* name) {
                 quality_string[0] = c;
                 break;
             case 3:
+                quality_string[qsi] = c;
+                qsi++;
                 break;
             default:
                 break;
         }
     }
+    
+    if (state == 3) {
+        
+        // attempt music note construction
+        music_note_t* note = music_note_new_from_string(note_string);
+        if (note == NULL) {
+            return NULL;
+        }
+        
+        // attempt chord quality construction      
+        quality_string[qsi] = '\0';
+        enum chord_quality chord_quality;
+        int quality_index = find_string(9, known_chord_interval_names, quality_string);
+        if (quality_index == -1) {
+            return NULL;
+        }
+        chord_quality = quality_index;
+        
+        chord_t* chord = chord_new2(*note, chord_quality);
+        music_note_free(note);
+        
+        return chord;
+    }
+    
     return NULL;
 }
 
