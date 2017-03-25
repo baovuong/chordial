@@ -85,7 +85,7 @@ void chord_get_notes_test(void) {
 
     music_note_t* notes = chord_notes(cmajor);
     CU_ASSERT_PTR_NOT_NULL_FATAL(notes);
-    
+
     int count = cmajor->intervalc+1;
 
     CU_ASSERT_TRUE(music_note_equals(c4, notes[0]));
@@ -96,6 +96,11 @@ void chord_get_notes_test(void) {
     chord_free(cmajor);
 }
 
+void chord_construction_from_string(void) {
+    chord_t Cmaj7 = chord_new_as_string("Cmaj7");
+
+    chord_free(Cmaj7);
+}
 
 int main (int argc, char** argv) {
     CU_pSuite pSuite = NULL;
@@ -119,6 +124,7 @@ int main (int argc, char** argv) {
     check = check || NULL == CU_add_test(pSuite, "Chord Construction", chord_new_test);
     check = check || NULL == CU_add_test(pSuite, "finding intervals in chords", chord_contains_interval_test);
     check = check || NULL == CU_add_test(pSuite, "generating music notes from chord", chord_get_notes_test);
+    check = check || NULL == CU_add_test(pSuite, "chord construction from string", chord_construction_from_string);
     if (check) {
       CU_cleanup_registry();
       return CU_get_error();
