@@ -5,6 +5,7 @@
 #include <regex.h>
 
 #include "chord.h"
+#include "helper_functions.h"
 
 #define NOTE_CHAR_MAX 3
 #define QUALITY_CHAR_MAX 6
@@ -59,14 +60,7 @@ interval_t known_chord_intervals[9][6] = {
 };
 
 // helper functions
-int find_string(int array_length, char* array[], const char* value) {
-    for (int i=0; i<array_length; i++) {
-        if (strcmp(array[i], value) == 0) {
-            return i;
-        }
-    }
-    return -1;
-}
+
 
 // constructors
 
@@ -98,7 +92,9 @@ chord_t* chord_new_as_string(const char* name) {
     char* note_string;
     char* quality_string;
     int qsi = 1;
-    while ((c = name[i]) != '\0') {
+    printf("start\n");
+    while ((c = name[i++]) != '\0') {
+        printf("%c\n", c);
         switch (state) {
             case 0:
                 if (strchr("ABCDEFG", c) != NULL) {
@@ -184,10 +180,11 @@ const char* chord_to_string(chord_t* chord) {
 
 music_note_t* chord_notes(chord_t* chord) {
     music_note_t* notes = (music_note_t*)calloc(chord->intervalc+1, sizeof(music_note_t));
-
+    
     // root note
     notes[0] = chord->root;
     for (int i=1; i<chord->intervalc+1; i++) {
+        printf("%i\n", i);
         music_note_t* note = music_note_new_from_midi_value(
             music_note_to_midi_value(chord->root) +
             interval_get_semitones(chord->intervals[i-1]));

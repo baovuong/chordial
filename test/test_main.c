@@ -97,8 +97,23 @@ void chord_get_notes_test(void) {
 }
 
 void chord_construction_from_string(void) {
-    chord_t Cmaj7 = chord_new_as_string("Cmaj7");
-
+    music_note_t c4 = {C, 4};
+    music_note_t e4 = {E, 4};
+    music_note_t g4 = {G, 4};
+    music_note_t b5 = {B, 5};
+    
+    chord_t* Cmaj7 = chord_new_as_string("Cmaj7");
+    CU_ASSERT_PTR_NOT_NULL_FATAL(Cmaj7);
+    
+    music_note_t* notes = chord_notes(Cmaj7);
+    CU_ASSERT_PTR_NOT_NULL_FATAL(notes);
+    
+    CU_ASSERT_TRUE(music_note_equals(c4, notes[0]));
+    CU_ASSERT_TRUE(music_note_equals(e4, notes[1]));
+    CU_ASSERT_TRUE(music_note_equals(g4, notes[2]));
+    CU_ASSERT_TRUE(music_note_equals(b5, notes[3]));
+    
+    free(notes);
     chord_free(Cmaj7);
 }
 

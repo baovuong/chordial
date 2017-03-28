@@ -6,7 +6,7 @@ set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/"
 set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -std=c99")
 set (CMAKE_REQUIRED_INCLUDES /usr/local/include)
 #set (CMAKE_VERBOSE_MAKEFILE ON)
-set (SRC_FILES src/music_note.c src/interval.c src/chord.c)
+set (SRC_FILES src/music_note.c src/interval.c src/chord.c src/helper_functions.c)
 set (TEST_FILES test/test_main.c)
 
 enable_testing ()

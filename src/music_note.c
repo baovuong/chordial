@@ -1,4 +1,5 @@
 #include "music_note.h"
+#include "helper_functions.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,6 +9,9 @@
 #define MIN_MIDI_VALUE 0
 
 const char* pitch_class_names[] = {"C","C#","D","D#","E","F","F#","G","G#","A","A#","B"};
+
+
+
 
 music_note_t* music_note_new() {
     return music_note_new1(C);
@@ -29,29 +33,70 @@ music_note_t* music_note_new2(enum pitch_class pitch_class, unsigned int octave)
 music_note_t* music_note_new_from_string(const char* input) {
     // parsing
     int state = 0;
+    char pitch[3];
+    char octave[3];
+    int oi = 0;
     for (const char* c = input; *c != '\0'; c++) {
         switch (state) {
             case 0:
                 if (strchr("ABCDEFG", *c) != NULL) {
+                    // get pitch started
+                    pitch[0] = *c;
+                    state = 1;
                 } else {
-                    state = 4;
+                    state = 5;
                 }
                 break;
             case 1:
                 if (strchr("#b", *c) != NULL) {
+                    pitch[1] = *c;
+                    // close it up
+                    pitch[2] = '\0';
                     state = 2;
-                } else if (strchr("0123456789", *c) != NULL) {
+                } else if (is_number(*c)) {
+                    // close it up
+                    pitch[1] = '\0';
+                    octave[0] = *c;
+                    state = 3;
+                } else {
+                    state = 5;
                 }
                 break;
             case 2:
+                if (is_number(*c)) {
+                    octave[0] = *c;
+                    state = 3;
+                } else {
+                    state = 5;
+                }
                 break;
             case 3:
+                if (is_number(*c)) {
+                    octave[1] = *c;
+                    // close up
+                    octave[2] = '\0';
+                    state = 4;
+                } else {
+                    state = 5;
+                }
+                break;
+            case 4:
+                // pls stop here
+                return NULL;
                 break;
             default:
+                // BAD
+                return NULL;
                 break;
         }
     }
-    return NULL;
+    if (state == 3) {
+        octave[1] = '\0';
+    }
+    enum pitch_class pitch_class = find_string(12, pitch_class_names, pitch);
+    int octave_value = atoi(octave);
+    
+    return music_note_new2(pitch_class, octave);
 }
 
 music_note_t* music_note_new_from_midi_value(unsigned int midi_value) {
