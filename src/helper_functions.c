@@ -14,3 +14,11 @@ int find_string(int array_length, const char* array[], const char* value) {
 int is_number(char c) {
     return strchr("0123456789", c) != NULL;
 }
+
+int is_pitch(char c) {
+    return strchr("ABCDEFG", c) != NULL;
+}
+
+int is_accent(char c) {
+    return strchr("#b", c) != NULL;
+}

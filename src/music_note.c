@@ -39,7 +39,7 @@ music_note_t* music_note_new_from_string(const char* input) {
     for (const char* c = input; *c != '\0'; c++) {
         switch (state) {
             case 0:
-                if (strchr("ABCDEFG", *c) != NULL) {
+                if (is_pitch(*c)) {
                     // get pitch started
                     pitch[0] = *c;
                     state = 1;
@@ -48,7 +48,7 @@ music_note_t* music_note_new_from_string(const char* input) {
                 }
                 break;
             case 1:
-                if (strchr("#b", *c) != NULL) {
+                if (is_accent(*c)) {
                     pitch[1] = *c;
                     // close it up
                     pitch[2] = '\0';
@@ -96,7 +96,7 @@ music_note_t* music_note_new_from_string(const char* input) {
     enum pitch_class pitch_class = find_string(12, pitch_class_names, pitch);
     int octave_value = atoi(octave);
     
-    return music_note_new2(pitch_class, octave);
+    return music_note_new2(pitch_class, octave_value);
 }
 
 music_note_t* music_note_new_from_midi_value(unsigned int midi_value) {

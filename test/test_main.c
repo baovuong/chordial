@@ -109,10 +109,14 @@ void chord_construction_from_string(void) {
     CU_ASSERT_PTR_NOT_NULL_FATAL(notes);
     
     CU_ASSERT_TRUE(music_note_equals(c4, notes[0]));
-    CU_ASSERT_TRUE(music_note_equals(e4, notes[1]));
-    CU_ASSERT_TRUE(music_note_equals(g4, notes[2]));
-    CU_ASSERT_TRUE(music_note_equals(b5, notes[3]));
     
+    printf("expected: %s; actual: %s\n", music_note_to_string(e4), music_note_to_string(notes[1]));
+    CU_ASSERT_TRUE(music_note_equals(e4, notes[1]));
+    
+    CU_ASSERT_TRUE(music_note_equals(g4, notes[2]));
+    
+    printf("expected: %s; actual: %s\n", music_note_to_string(b5), music_note_to_string(notes[3]));
+    CU_ASSERT_TRUE(music_note_equals(b5, notes[3]));
     free(notes);
     chord_free(Cmaj7);
 }

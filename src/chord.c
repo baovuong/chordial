@@ -7,7 +7,7 @@
 #include "chord.h"
 #include "helper_functions.h"
 
-#define NOTE_CHAR_MAX 3
+#define NOTE_CHAR_MAX 5
 #define QUALITY_CHAR_MAX 6
 
 // using this for reference:
@@ -17,7 +17,7 @@
 char* chord_quality_values[] = {"maj","min","aug","dim","dom"};
 const char* chord_quality_names[] = {
     "major",
-    "minor",
+    "minor", 
     "augmented",
     "diminished",
     "dominant"
@@ -25,7 +25,7 @@ const char* chord_quality_names[] = {
 
 int extensions[] = {0, 7, 9, 11, 13};
 
-char* known_chord_interval_names[] = {
+const char* known_chord_interval_names[] = {
     "maj",
     "min",
     "aug",
@@ -85,6 +85,10 @@ chord_t* chord_new2(music_note_t root, enum chord_quality chord_quality) {
 }
 
 chord_t* chord_new_as_string(const char* name) {
+    return chord_new_as_string1(name, 4);
+}
+
+chord_t* chord_new_as_string1(const char* name, int octave) {
     // parse through string
     int state = 0;
     int i = 0;
@@ -92,12 +96,10 @@ chord_t* chord_new_as_string(const char* name) {
     char* note_string;
     char* quality_string;
     int qsi = 1;
-    printf("start\n");
     while ((c = name[i++]) != '\0') {
-        printf("%c\n", c);
         switch (state) {
             case 0:
-                if (strchr("ABCDEFG", c) != NULL) {
+                if (is_pitch(c)) {
                     note_string = (char*)calloc(NOTE_CHAR_MAX, sizeof(char));
                     note_string[0] = c;
                     state = 1;
@@ -106,7 +108,7 @@ chord_t* chord_new_as_string(const char* name) {
                 }
                 break;
             case 1:
-                if (strchr("#b", c) != NULL) {
+                if (is_accent(c)) {
                     note_string[1] = c;
                     state = 2;
                 } else {
@@ -133,6 +135,12 @@ chord_t* chord_new_as_string(const char* name) {
     if (state == 3) {
         
         // attempt music note construction
+        // add octave to note string
+        char octave_string[4];
+        sprintf(octave_string, "%d", octave);
+        strcat(note_string, octave_string);
+        printf("note_string: %s\n", note_string);
+        
         music_note_t* note = music_note_new_from_string(note_string);
         if (note == NULL) {
             return NULL;
@@ -184,7 +192,6 @@ music_note_t* chord_notes(chord_t* chord) {
     // root note
     notes[0] = chord->root;
     for (int i=1; i<chord->intervalc+1; i++) {
-        printf("%i\n", i);
         music_note_t* note = music_note_new_from_midi_value(
             music_note_to_midi_value(chord->root) +
             interval_get_semitones(chord->intervals[i-1]));
