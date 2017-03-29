@@ -55,7 +55,7 @@ interval_t known_chord_intervals[9][6] = {
     { {MAJOR, 3}, {PERFECT, 5}, {MAJOR, 6}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // maj6
     { {MINOR, 3}, {PERFECT, 5}, {MAJOR, 6}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // min6
     { {MAJOR, 3}, {PERFECT, 5}, {MINOR, 7}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // dom7
-    { {MINOR, 3}, {PERFECT, 5}, {MAJOR, 7}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // maj7
+    { {MAJOR, 3}, {PERFECT, 5}, {MAJOR, 7}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // maj7
     { {MINOR, 3}, {PERFECT, 5}, {MINOR, 7}, {PERFECT, 1}, {PERFECT, 1}, {PERFECT, 1} }, // min7
 };
 
@@ -149,7 +149,9 @@ chord_t* chord_new_as_string1(const char* name, int octave) {
         // attempt chord quality construction      
         quality_string[qsi] = '\0';
         enum chord_quality chord_quality;
+        printf("quality_string: %s\n", quality_string);
         int quality_index = find_string(9, known_chord_interval_names, quality_string);
+        printf("index: %i\n", quality_index);
         if (quality_index == -1) {
             return NULL;
         }

@@ -100,7 +100,7 @@ void chord_construction_from_string(void) {
     music_note_t c4 = {C, 4};
     music_note_t e4 = {E, 4};
     music_note_t g4 = {G, 4};
-    music_note_t b5 = {B, 5};
+    music_note_t b4 = {B, 4};
     
     chord_t* Cmaj7 = chord_new_as_string("Cmaj7");
     CU_ASSERT_PTR_NOT_NULL_FATAL(Cmaj7);
@@ -109,14 +109,9 @@ void chord_construction_from_string(void) {
     CU_ASSERT_PTR_NOT_NULL_FATAL(notes);
     
     CU_ASSERT_TRUE(music_note_equals(c4, notes[0]));
-    
-    printf("expected: %s; actual: %s\n", music_note_to_string(e4), music_note_to_string(notes[1]));
-    CU_ASSERT_TRUE(music_note_equals(e4, notes[1]));
-    
+    CU_ASSERT_TRUE(music_note_equals(e4, notes[1])); 
     CU_ASSERT_TRUE(music_note_equals(g4, notes[2]));
-    
-    printf("expected: %s; actual: %s\n", music_note_to_string(b5), music_note_to_string(notes[3]));
-    CU_ASSERT_TRUE(music_note_equals(b5, notes[3]));
+    CU_ASSERT_TRUE(music_note_equals(b4, notes[3]));
     free(notes);
     chord_free(Cmaj7);
 }
