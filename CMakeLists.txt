@@ -7,7 +7,7 @@ set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -std=c99")
 set (CMAKE_REQUIRED_INCLUDES /usr/local/include)
 #set (CMAKE_VERBOSE_MAKEFILE ON)
 set (SRC_FILES src/music_note.c src/interval.c src/chord.c src/helper_functions.c)
-set (TEST_FILES test/test_main.c)
+set (TEST_FILES test/test_main.c test/test_note.c test/test_interval.c test/test_chord.c)
 
 enable_testing ()
 

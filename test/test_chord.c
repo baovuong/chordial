@@ -1,4 +1,8 @@
+#include <CUnit/CUnit.h>
 #include "test_chord.h"
+#include "../src/music_note.h"
+#include "../src/interval.h"
+#include "../src/chord.h"
 
 // chord construction
 void chord_new_test(void) {

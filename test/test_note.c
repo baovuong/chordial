@@ -1,5 +1,8 @@
+#include <CUnit/CUnit.h>
+
 #include "test_note.h"
 
+#include "../src/music_note.h"
 
 // music note
 void music_note_to_midi_value_test(void) {

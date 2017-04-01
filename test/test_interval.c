@@ -1,5 +1,8 @@
-#include "test_interval.h"
+#include <CUnit/CUnit.h>
 
+
+#include "test_interval.h"
+#include "../src/interval.h"
 
 // interval
 void interval_get_semitones_test(void) {
