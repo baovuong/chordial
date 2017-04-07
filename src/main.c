@@ -110,6 +110,18 @@ onion_connection_status chord(void *p, onion_request *req, onion_response *res) 
     return OCS_PROCESSED;
 }
 
+onion_connection_status api_chordprogression_notes(void *p, onion_request *req, onion_response *res) {
+    if (!OR_POST != (OR_METHODS & onion_request_get_flags(req))) {
+        onion_response_set_code(res, HTTP_METHOD_NOT_ALLOWED);
+        return OCS_PROCESSED;
+    }
+    
+    // get array of chords, should be in json format
+    
+    
+    return OCS_PROCESSED;
+}
+
 onion_connection_status arg_test(void *p, onion_request *req, onion_response *res) {
     if ((OR_METHODS & onion_request_get_flags(req)) == OR_GET) { 
         onion_response_set_code(res, HTTP_OK);
