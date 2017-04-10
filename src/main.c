@@ -111,13 +111,27 @@ onion_connection_status chord(void *p, onion_request *req, onion_response *res) 
 }
 
 onion_connection_status api_chordprogression_notes(void *p, onion_request *req, onion_response *res) {
-    if (!OR_POST != (OR_METHODS & onion_request_get_flags(req))) {
+    if (OR_POST != (OR_METHODS & onion_request_get_flags(req))) {
         onion_response_set_code(res, HTTP_METHOD_NOT_ALLOWED);
         return OCS_PROCESSED;
     }
     
     // get array of chords, should be in json format
     
+    const onion_block* data = onion_request_get_data(req);
+    if (data != NULL) {
+        const char* content = onion_block_data(data);
+        
+        struct json_object* obj = json_tokener_parse(content);
+        struct array_list* chords = json_object_get_array(obj);
+        if (chords != NULL) {
+            
+        }
+        //printf("%i\n", chords->length);
+        
+        free(chords);
+        free(obj);
+    }
     
     return OCS_PROCESSED;
 }
@@ -167,6 +181,7 @@ int main(int argc, char* argv[]) {
     
     onion_url_add(urls, "^api/notes$", api_notes);
     onion_url_add(urls, "^api/intervals$", api_intervals);
+    onion_url_add(urls, "^api/chordprogression/notes$", api_chordprogression_notes);
     
 
     // start
