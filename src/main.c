@@ -8,10 +8,12 @@
 #include <onion/request.h>
 #include <onion/response.h>
 #include <onion/shortcuts.h>
+#include <onion/types.h>
 #include <onion/version.h>
 
 #include <onion/static.h>
 #include <onion/opack.h>
+
 
 #include <json/json.h>
 
@@ -117,19 +119,50 @@ onion_connection_status api_chordprogression_notes(void *p, onion_request *req, 
     }
     
     // get array of chords, should be in json format
-    
     const onion_block* data = onion_request_get_data(req);
     if (data != NULL) {
+        int success = 1;
         const char* content = onion_block_data(data);
         
         struct json_object* obj = json_tokener_parse(content);
-        struct array_list* chords = json_object_get_array(obj);
-        if (chords != NULL) {
+        struct array_list* chord_names = json_object_get_array(obj);
+        if (chord_names != NULL) {
+            // iterate through chords
+            chord_t* chords[chord_names->length];
+            for (int i=0; i<chord_names->length; i++) {
+                // make sure it's a string
+                if (json_object_get_type(chord_names->array[i]) != json_type_string) {
+                    // not good
+                    onion_response_set_code(res,  HTTP_BAD_REQUEST);
+                    success = 0;
+                    break;
+                }
+                chords[i] = chord_new_as_string(json_object_get_string(chord_names->array[i]));
+                if (chords[i] == NULL) {
+                    onion_response_set_code(res,  HTTP_BAD_REQUEST);
+                    success = 0;
+                    for (int j=i; j >= 0; j--)
+                        chord_free(chords[j]);
+                    break;
+                }
+            }
             
+            if (success) {
+                //struct json_object* chord_progression = json_object_new_array();
+                for (int i=0; i<chord_names->length; i++) {
+                    music_note_t* notes = chord_notes(chords[i]);
+                    for (int j=0; j<chords[i]->intervalc+1; j++) {
+                        printf("%s ", music_note_to_string(notes[j]));
+                    }
+                    printf("\n");
+                    music_note_free(notes);
+                    chord_free(chords[i]);
+                }
+                
+            }
         }
-        //printf("%i\n", chords->length);
         
-        free(chords);
+        free(chord_names);
         free(obj);
     }
     
