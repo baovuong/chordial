@@ -47,7 +47,7 @@ onion_connection_status api_notes(void *p, onion_request *req, onion_response *r
     }
     onion_response_set_header(res, "Content-Type", "application/json");
     onion_response_write0(res, json_object_to_json_string(notes));
-	
+
     // cleanup
     free(notes);
     music_note_free(note);
@@ -61,18 +61,18 @@ onion_connection_status api_intervals(void *p, onion_request *req, onion_respons
     struct json_object* interval_json;
     for (int i=0; i<5; i++) {
         for (unsigned int j=1; j<=8; j++) {
-            interval = interval_new((enum quality)i, j);    
+            interval = interval_new((enum quality)i, j);
             if (interval != NULL) {
                 interval_to_json_object(*interval, &interval_json);
                 json_object_array_add(interval_checks, interval_json);
-            } 
-            
+            }
+
         }
     }
 
     onion_response_set_header(res, "Content-Type", "application/json");
     onion_response_write0(res, json_object_to_json_string(interval_checks));
-    
+
     free(interval_checks);
     interval_free(interval);
     free(interval_json);
@@ -94,7 +94,7 @@ onion_connection_status chord(void *p, onion_request *req, onion_response *res) 
         } else {
             chord_to_json_object(chord, json);
         }
-        
+
     } else {
         json = json_object_new_object();
         json_object_object_add(json, "message", json_object_new_string("no chord provided"));
@@ -117,13 +117,13 @@ onion_connection_status api_chordprogression_notes(void *p, onion_request *req, 
         onion_response_set_code(res, HTTP_METHOD_NOT_ALLOWED);
         return OCS_PROCESSED;
     }
-    
+
     // get array of chords, should be in json format
     const onion_block* data = onion_request_get_data(req);
     if (data != NULL) {
         int success = 1;
         const char* content = onion_block_data(data);
-        
+
         struct json_object* obj = json_tokener_parse(content);
         struct array_list* chord_names = json_object_get_array(obj);
         if (chord_names != NULL) {
@@ -146,31 +146,42 @@ onion_connection_status api_chordprogression_notes(void *p, onion_request *req, 
                     break;
                 }
             }
-            
+
             if (success) {
-                //struct json_object* chord_progression = json_object_new_array();
+                struct json_object* chord_progression_json = json_object_new_array();
+                struct json_object* chord_json;
                 for (int i=0; i<chord_names->length; i++) {
+                    chord_json = json_object_new_array();
                     music_note_t* notes = chord_notes(chords[i]);
                     for (int j=0; j<chords[i]->intervalc+1; j++) {
+                        json_object_array_add(chord_json, json_object_new_string(music_note_to_string(notes[j])));
                         printf("%s ", music_note_to_string(notes[j]));
                     }
                     printf("\n");
+                    json_object_array_add(chord_progression_json, chord_json);
                     music_note_free(notes);
                     chord_free(chords[i]);
                 }
-                
+
+                onion_response_set_header(res, "Content-Type", "application/json");
+                const char* json_string = json_object_to_json_string(chord_progression_json);
+                onion_response_write0(res, json_string);
+
+
+                free(chord_json);
+                free(chord_progression_json);
             }
         }
-        
+
         free(chord_names);
         free(obj);
     }
-    
+
     return OCS_PROCESSED;
 }
 
 onion_connection_status arg_test(void *p, onion_request *req, onion_response *res) {
-    if ((OR_METHODS & onion_request_get_flags(req)) == OR_GET) { 
+    if ((OR_METHODS & onion_request_get_flags(req)) == OR_GET) {
         onion_response_set_code(res, HTTP_OK);
     } else {
         onion_response_set_code(res, HTTP_METHOD_NOT_ALLOWED);
@@ -191,13 +202,13 @@ void on_exit(int _) {
 int index_html_template(void *, onion_request *req, onion_response *res);
 
 int main(int argc, char* argv[]) {
-    
+
     // triggers
     signal(SIGINT,on_exit);
     signal(SIGTERM,on_exit);
-    
+
     ONION_VERSION_IS_COMPATIBLE_OR_ABORT();
-    
+
     // setup
     o = onion_new(O_POOL | O_SYSTEMD);
     onion_set_timeout(o, 5000);
@@ -211,11 +222,11 @@ int main(int argc, char* argv[]) {
     onion_url_add(urls, "^notes$", notes);
     onion_url_add(urls, "^static/", opack_static);
     onion_url_add(urls, "^arg-test$", arg_test);
-    
+
     onion_url_add(urls, "^api/notes$", api_notes);
     onion_url_add(urls, "^api/intervals$", api_intervals);
     onion_url_add(urls, "^api/chordprogression/notes$", api_chordprogression_notes);
-    
+
 
     // start
     onion_listen(o);
