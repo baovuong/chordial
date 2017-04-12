@@ -153,11 +153,8 @@ onion_connection_status api_chordprogression_notes(void *p, onion_request *req, 
                 for (int i=0; i<chord_names->length; i++) {
                     chord_json = json_object_new_array();
                     music_note_t* notes = chord_notes(chords[i]);
-                    for (int j=0; j<chords[i]->intervalc+1; j++) {
+                    for (int j=0; j<chords[i]->intervalc+1; j++)
                         json_object_array_add(chord_json, json_object_new_string(music_note_to_string(notes[j])));
-                        printf("%s ", music_note_to_string(notes[j]));
-                    }
-                    printf("\n");
                     json_object_array_add(chord_progression_json, chord_json);
                     music_note_free(notes);
                     chord_free(chords[i]);
