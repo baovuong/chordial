@@ -15,7 +15,7 @@ enable_testing ()
 add_custom_command (OUTPUT layout_html.c COMMAND otemplate views/layout.html layout_html.c DEPENDS views/layout.html)
 add_custom_command (OUTPUT index_html.c COMMAND otemplate views/index.html index_html.c DEPENDS views/index.html layout_html.c)
 add_custom_command (OUTPUT chordial_data.c COMMAND opack static -o chordial_data.c DEPENDS static/*)
-add_executable (chordial ${SRC_FILES} src/main.c chordial_data.c layout_html.c index_html.c)
+add_executable (chordial ${SRC_FILES} src/controller.c  src/main.c chordial_data.c layout_html.c index_html.c)
 
 add_executable (test_chordial ${TEST_FILES} ${SRC_FILES})
 target_link_libraries (test_chordial cunit)
