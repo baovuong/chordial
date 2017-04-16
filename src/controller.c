@@ -2,7 +2,6 @@
 #include <onion/block.h>
 #include <onion/request.h>
 #include <onion/response.h>
-#include <onion/types.h>
 
 #include <json/json.h>
 
@@ -27,7 +26,6 @@ void onion_response_write_json(onion_response* res, struct json_object* obj) {
 void controller_setup(onion_url *urls) {
     onion_url_add(urls, "^chord/(.*)", chord);
     onion_url_add(urls, "^notes$", notes);
-
     onion_url_add(urls, "^arg-test$", arg_test);
 
     // api calls
@@ -81,7 +79,6 @@ onion_connection_status api_intervals(void *p, onion_request *req, onion_respons
                 interval_to_json_object(*interval, &interval_json);
                 json_object_array_add(interval_checks, interval_json);
             }
-
         }
     }
     onion_response_write_json(res, interval_checks);

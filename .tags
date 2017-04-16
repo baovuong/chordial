@@ -365,9 +365,6 @@ info_language_dialect_default	/home/bvuong/git/chordial/CMakeFiles/3.5.1/Compile
 main	/home/bvuong/git/chordial/CMakeFiles/3.5.1/CompilerIdC/CMakeCCompilerId.c	/^void main() {}$/;"	function	line:520
 main	/home/bvuong/git/chordial/CMakeFiles/3.5.1/CompilerIdC/CMakeCCompilerId.c	/^int main(int argc, char* argv[])$/;"	function	line:522	signature:(int argc, char* argv[])
 __ASSETS_H__ASSETS_H	/home/bvuong/git/chordial/assets.h	/^#define __ASSETS_H__ASSETS_H$/;"	macro	line:3
-o	/home/bvuong/git/chordial/src/main.c	/^onion *o = NULL;$/;"	variable	line:20
-on_exit	/home/bvuong/git/chordial/src/main.c	/^void on_exit(int _) {$/;"	function	line:22	signature:(int _)
-main	/home/bvuong/git/chordial/src/main.c	/^int main(int argc, char* argv[]) {$/;"	function	line:32	signature:(int argc, char* argv[])
 MAX_MIDI_VALUE	/home/bvuong/git/chordial/src/music_note.c	/^#define MAX_MIDI_VALUE /;"	macro	line:8	file:
 MIN_MIDI_VALUE	/home/bvuong/git/chordial/src/music_note.c	/^#define MIN_MIDI_VALUE /;"	macro	line:9	file:
 pitch_class_names	/home/bvuong/git/chordial/src/music_note.c	/^const char* pitch_class_names[] = {"C","C#","D","D#","E","F","F#","G","G#","A","A#","B"};$/;"	variable	line:11
@@ -622,12 +619,15 @@ index_html_template	/home/bvuong/git/chordial/index_html.c	/^onion_connection_st
 index_html_blocks_init	/home/bvuong/git/chordial/index_html.c	/^void index_html_blocks_init(onion_dict *context){$/;"	function	line:47	signature:(onion_dict *context)
 index_html	/home/bvuong/git/chordial/index_html.c	/^void index_html(onion_dict *context, onion_response *res){$/;"	function	line:54	signature:(onion_dict *context, onion_response *res)
 index_html__block_content	/home/bvuong/git/chordial/index_html.c	/^void index_html__block_content(onion_dict *context, onion_response *res){$/;"	function	line:75	signature:(onion_dict *context, onion_response *res)
-CHECK_METHOD	/home/bvuong/git/chordial/src/controller.c	/^#define CHECK_METHOD(/;"	macro	line:14	file:
-onion_response_write_json	/home/bvuong/git/chordial/src/controller.c	/^void onion_response_write_json(onion_response* res, struct json_object* obj) {$/;"	function	line:21	signature:(onion_response* res, struct json_object* obj)
-controller_setup	/home/bvuong/git/chordial/src/controller.c	/^void controller_setup(onion_url *urls) {$/;"	function	line:27	signature:(onion_url *urls)
-notes	/home/bvuong/git/chordial/src/controller.c	/^onion_connection_status notes(void *p, onion_request *req, onion_response *res) {$/;"	function	line:41	signature:(void *p, onion_request *req, onion_response *res)
-api_notes	/home/bvuong/git/chordial/src/controller.c	/^onion_connection_status api_notes(void *p, onion_request *req, onion_response *res) {$/;"	function	line:53	signature:(void *p, onion_request *req, onion_response *res)
-api_intervals	/home/bvuong/git/chordial/src/controller.c	/^onion_connection_status api_intervals(void *p, onion_request *req, onion_response *res) {$/;"	function	line:73	signature:(void *p, onion_request *req, onion_response *res)
-chord	/home/bvuong/git/chordial/src/controller.c	/^onion_connection_status chord(void *p, onion_request *req, onion_response *res) {$/;"	function	line:95	signature:(void *p, onion_request *req, onion_response *res)
-api_chordprogression_notes	/home/bvuong/git/chordial/src/controller.c	/^onion_connection_status api_chordprogression_notes(void *p, onion_request *req, onion_response *res) {$/;"	function	line:122	signature:(void *p, onion_request *req, onion_response *res)
-arg_test	/home/bvuong/git/chordial/src/controller.c	/^onion_connection_status arg_test(void *p, onion_request *req, onion_response *res) {$/;"	function	line:180	signature:(void *p, onion_request *req, onion_response *res)
+o	/home/bvuong/git/chordial/src/main.c	/^onion *o = NULL;$/;"	variable	line:17
+on_exit	/home/bvuong/git/chordial/src/main.c	/^void on_exit(int _) {$/;"	function	line:19	signature:(int _)
+main	/home/bvuong/git/chordial/src/main.c	/^int main(int argc, char* argv[]) {$/;"	function	line:29	signature:(int argc, char* argv[])
+CHECK_METHOD	/home/bvuong/git/chordial/src/controller.c	/^#define CHECK_METHOD(/;"	macro	line:13	file:
+onion_response_write_json	/home/bvuong/git/chordial/src/controller.c	/^void onion_response_write_json(onion_response* res, struct json_object* obj) {$/;"	function	line:20	signature:(onion_response* res, struct json_object* obj)
+controller_setup	/home/bvuong/git/chordial/src/controller.c	/^void controller_setup(onion_url *urls) {$/;"	function	line:26	signature:(onion_url *urls)
+notes	/home/bvuong/git/chordial/src/controller.c	/^onion_connection_status notes(void *p, onion_request *req, onion_response *res) {$/;"	function	line:39	signature:(void *p, onion_request *req, onion_response *res)
+api_notes	/home/bvuong/git/chordial/src/controller.c	/^onion_connection_status api_notes(void *p, onion_request *req, onion_response *res) {$/;"	function	line:51	signature:(void *p, onion_request *req, onion_response *res)
+api_intervals	/home/bvuong/git/chordial/src/controller.c	/^onion_connection_status api_intervals(void *p, onion_request *req, onion_response *res) {$/;"	function	line:71	signature:(void *p, onion_request *req, onion_response *res)
+chord	/home/bvuong/git/chordial/src/controller.c	/^onion_connection_status chord(void *p, onion_request *req, onion_response *res) {$/;"	function	line:92	signature:(void *p, onion_request *req, onion_response *res)
+api_chordprogression_notes	/home/bvuong/git/chordial/src/controller.c	/^onion_connection_status api_chordprogression_notes(void *p, onion_request *req, onion_response *res) {$/;"	function	line:119	signature:(void *p, onion_request *req, onion_response *res)
+arg_test	/home/bvuong/git/chordial/src/controller.c	/^onion_connection_status arg_test(void *p, onion_request *req, onion_response *res) {$/;"	function	line:177	signature:(void *p, onion_request *req, onion_response *res)

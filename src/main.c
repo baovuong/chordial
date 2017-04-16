@@ -1,13 +1,10 @@
 #include <stdio.h>
 #include <signal.h>
 
-#include <onion/log.h>
 #include <onion/onion.h>
 #include <onion/block.h>
 #include <onion/request.h>
 #include <onion/response.h>
-#include <onion/shortcuts.h>
-#include <onion/types.h>
 #include <onion/version.h>
 
 #include <onion/static.h>
