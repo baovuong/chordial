@@ -13,14 +13,9 @@
 #include <onion/static.h>
 #include <onion/opack.h>
 
-
-#include <json/json.h>
-
 #include "../assets.h"
 
 #include "controller.h"
-
-
 
 onion *o = NULL;
 

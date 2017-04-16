@@ -17,7 +17,7 @@
 char* chord_quality_values[] = {"maj","min","aug","dim","dom"};
 const char* chord_quality_names[] = {
     "major",
-    "minor", 
+    "minor",
     "augmented",
     "diminished",
     "dominant"
@@ -131,22 +131,22 @@ chord_t* chord_new_as_string1(const char* name, int octave) {
                 break;
         }
     }
-    
+
     if (state == 3) {
-        
+
         // attempt music note construction
         // add octave to note string
         char octave_string[4];
         sprintf(octave_string, "%d", octave);
         strcat(note_string, octave_string);
         printf("note_string: %s\n", note_string);
-        
+
         music_note_t* note = music_note_new_from_string(note_string);
         if (note == NULL) {
             return NULL;
         }
-        
-        // attempt chord quality construction      
+
+        // attempt chord quality construction
         quality_string[qsi] = '\0';
         enum chord_quality chord_quality;
         printf("quality_string: %s\n", quality_string);
@@ -156,13 +156,13 @@ chord_t* chord_new_as_string1(const char* name, int octave) {
             return NULL;
         }
         chord_quality = quality_index;
-        
+
         chord_t* chord = chord_new2(*note, chord_quality);
         music_note_free(note);
-        
+
         return chord;
     }
-    
+
     return NULL;
 }
 
@@ -190,7 +190,7 @@ const char* chord_to_string(chord_t* chord) {
 
 music_note_t* chord_notes(chord_t* chord) {
     music_note_t* notes = (music_note_t*)calloc(chord->intervalc+1, sizeof(music_note_t));
-    
+
     // root note
     notes[0] = chord->root;
     for (int i=1; i<chord->intervalc+1; i++) {

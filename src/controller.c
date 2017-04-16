@@ -4,22 +4,40 @@
 #include <onion/response.h>
 #include <onion/types.h>
 
+#include <json/json.h>
+
 #include "controller.h"
 #include "music_note.h"
 #include "chord.h"
 
+// helpers
+#define CHECK_METHOD(req, res, method) {\
+    if (method != (OR_METHODS & onion_request_get_flags(req))) {\
+        onion_response_set_code(res, HTTP_METHOD_NOT_ALLOWED);\
+        return OCS_PROCESSED;\
+    }\
+}
+
+void onion_response_write_json(onion_response* res, struct json_object* obj) {
+    onion_response_set_header(res, "Content-Type", "application/json");
+    onion_response_write0(res, json_object_to_json_string(obj));
+}
+
+// setup
 void controller_setup(onion_url *urls) {
     onion_url_add(urls, "^chord/(.*)", chord);
     onion_url_add(urls, "^notes$", notes);
 
     onion_url_add(urls, "^arg-test$", arg_test);
 
+    // api calls
     onion_url_add(urls, "^api/notes$", api_notes);
     onion_url_add(urls, "^api/intervals$", api_intervals);
     onion_url_add(urls, "^api/chordprogression/notes$", api_chordprogression_notes);
 }
 
 
+// controller actions
 onion_connection_status notes(void *p, onion_request *req, onion_response *res) {
     for (int i=0; i<11; i++) {
         for (int j=0; j<11; j++) {
@@ -43,8 +61,7 @@ onion_connection_status api_notes(void *p, onion_request *req, onion_response *r
             json_object_array_add(notes, note_json);
         }
     }
-    onion_response_set_header(res, "Content-Type", "application/json");
-    onion_response_write0(res, json_object_to_json_string(notes));
+    onion_response_write_json(res, notes);
 
     // cleanup
     free(notes);
@@ -67,9 +84,7 @@ onion_connection_status api_intervals(void *p, onion_request *req, onion_respons
 
         }
     }
-
-    onion_response_set_header(res, "Content-Type", "application/json");
-    onion_response_write0(res, json_object_to_json_string(interval_checks));
+    onion_response_write_json(res, interval_checks);
 
     free(interval_checks);
     interval_free(interval);
@@ -78,10 +93,7 @@ onion_connection_status api_intervals(void *p, onion_request *req, onion_respons
 }
 
 onion_connection_status chord(void *p, onion_request *req, onion_response *res) {
-    if (OR_GET != (OR_METHODS & onion_request_get_flags(req))) {
-        onion_response_set_code(res, HTTP_METHOD_NOT_ALLOWED);
-        return OCS_PROCESSED;
-    }
+    CHECK_METHOD(req, res, OR_GET);
     chord_t* chord = NULL;
     struct json_object* json = NULL;
     if (onion_request_get_query(req, "1")) {
@@ -99,10 +111,7 @@ onion_connection_status chord(void *p, onion_request *req, onion_response *res) 
     }
 
     // write to response
-    onion_response_set_header(res, "Content-Type", "application/json");
-
-    const char* json_string = json_object_to_json_string(json);
-    onion_response_write0(res, json_string);
+    onion_response_write_json(res, json);
 
     // cleanup
     chord_free(chord);
@@ -111,10 +120,7 @@ onion_connection_status chord(void *p, onion_request *req, onion_response *res) 
 }
 
 onion_connection_status api_chordprogression_notes(void *p, onion_request *req, onion_response *res) {
-    if (OR_POST != (OR_METHODS & onion_request_get_flags(req))) {
-        onion_response_set_code(res, HTTP_METHOD_NOT_ALLOWED);
-        return OCS_PROCESSED;
-    }
+    CHECK_METHOD(req, res, OR_POST);
 
     // get array of chords, should be in json format
     const onion_block* data = onion_request_get_data(req);
@@ -157,11 +163,7 @@ onion_connection_status api_chordprogression_notes(void *p, onion_request *req, 
                     music_note_free(notes);
                     chord_free(chords[i]);
                 }
-
-                onion_response_set_header(res, "Content-Type", "application/json");
-                const char* json_string = json_object_to_json_string(chord_progression_json);
-                onion_response_write0(res, json_string);
-
+                onion_response_write_json(res, chord_progression_json);
 
                 free(chord_json);
                 free(chord_progression_json);
@@ -176,10 +178,6 @@ onion_connection_status api_chordprogression_notes(void *p, onion_request *req, 
 }
 
 onion_connection_status arg_test(void *p, onion_request *req, onion_response *res) {
-    if ((OR_METHODS & onion_request_get_flags(req)) == OR_GET) {
-        onion_response_set_code(res, HTTP_OK);
-    } else {
-        onion_response_set_code(res, HTTP_METHOD_NOT_ALLOWED);
-    }
+    CHECK_METHOD(req, res, OR_GET);
     return OCS_PROCESSED;
 }
